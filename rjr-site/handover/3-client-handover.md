@@ -6,7 +6,7 @@ For RJR Home Improvements, from APX Digital. Updated 27 September 2026.
 
 | | |
 |---|---|
-| Website | Built and ready: 94 pages |
+| Website | Built and ready: 95 pages, including a Contact page with a quote form |
 | Preview link | [add demo link] |
 | Your web address | rjrhomeimprovements.com (to be bought) |
 | Visible on Google? | Not yet. The preview is hidden from search engines on purpose until your domain is live, so the preview copy doesn't compete with the real site. |
@@ -16,7 +16,8 @@ For RJR Home Improvements, from APX Digital. Updated 27 September 2026.
 
 A website built to bring in roofing work across Birmingham and the West Midlands, with emergency repairs first.
 
-- **One main button everywhere: "WhatsApp a photo".** It opens WhatsApp to 07542 373810 with a message already started, including the area and job type. Customers just add their photo and postcode.
+- **A quote form on every page**, plus its own Contact page. Customers pick from dropdowns (what they need, how urgent, their area, property type, how and when to reply), add their name, postcode and what's happening, then press **Continue to WhatsApp**. WhatsApp opens on their phone with the whole message written out to 07542 373810; they add photos and press send. So every enquiry arrives with the same details, in the same order.
+- **The form is already filled in for the page they're on.** On the Moseley roof leak page, for example, "Roof leak repairs", "Moseley" and "Emergency" are pre-selected.
 - **A Call button** on every page, and a WhatsApp/Call bar fixed to the bottom of the screen on phones.
 - **Emergency pages** for leaks, storm damage and urgent repairs, with a simple "what to do right now" guide for customers.
 - **A page for each service:** roof repairs and re-roofing, chimneys, flat roofs, guttering, fascias and soffits, Velux windows, leadwork, roof cleaning and roof insulation, plus pages for brickwork, building work, and zinc, metal and thatched roofs. Each covers what goes wrong, how the job is done, what affects the price, and common questions.
@@ -56,7 +57,7 @@ Tell us what you want changed (new photos, new reviews, a new service or area, p
 ## Your cookie and privacy position, in plain terms
 
 - The site doesn't track anyone unless they click "Accept analytics". Right now there is no analytics installed at all.
-- The site has no forms, so it doesn't collect personal details. Customers contact you on WhatsApp or by phone.
+- The quote form doesn't send or store anything on the website. It only writes the customer's answers into a WhatsApp message on their own phone, and nothing reaches you until they press send.
 - The privacy policy covers the details customers send you (name, number, address, photos) and how long you keep them.
 
 Website by APX Digital: https://apxdigital.io

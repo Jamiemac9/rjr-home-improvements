@@ -3,8 +3,9 @@
 Static site for RJR Home Improvements (R.J.R Home Improvements Ltd), emergency roofers in Birmingham & the West Midlands.
 Website by [APX Digital](https://apxdigital.io).
 
-- 94 indexable pages: home, 12 roofing service pages, 3 grouped trade pages, 10 area pages, 60 area × service pages, before/after, reviews, about, privacy policy, cookie policy, sitemap (plus a 404).
-- Plain HTML + one CSS file + one ~1 KB script (cookie consent). No framework, no build tooling beyond Python.
+- 95 indexable pages: home, contact, 12 roofing service pages, 3 grouped trade pages, 10 area pages, 60 area × service pages, before/after, reviews, about, privacy policy, cookie policy, sitemap (plus a 404).
+- Plain HTML + one CSS file + two small scripts (cookie consent, quote form). No framework, no build tooling beyond Python.
+- Quote form on every page (and at `/contact/`): dropdowns for service, urgency, area, property type, reply method and time, plus name, postcode and details. It opens WhatsApp with the answers written in; the website never sends or stores them. Each page pre-selects its own service/area (and "Emergency" on emergency pages). Options live in `build.py` (`URGENCY`, `PROPERTY`, `REPLY`, `WHEN`); services and areas come from `content.py`.
 - Every internal link is relative, so the `site/` folder works on any host, in a sub-folder, or opened straight from disk.
 
 **Deploying?** See [DEPLOY.md](DEPLOY.md): Cursor setup, a demo on Netlify or Cloudflare before the domain is bought, and the launch checklist.
@@ -38,6 +39,7 @@ images/                    original photos (source of truth)
 static/                    copied into site/ as-is
   assets/site.css          the whole design system
   assets/consent.js        cookie consent (analytics only run after "Accept")
+  assets/quote.js          quote form -> pre-filled WhatsApp message (nothing sent to a server)
   assets/favicon.svg
   _headers                 cache + security headers for Netlify / Cloudflare Pages
 site/                      GENERATED output: deploy this folder

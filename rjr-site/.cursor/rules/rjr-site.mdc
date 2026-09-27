@@ -30,4 +30,5 @@ alwaysApply: true
 
 ## Performance
 - All images go through `tools/optimise_images.py` (WebP srcset, width/height set, lazy below the fold).
-- No new JS libraries. The only script is `consent.js`.
+- No new JS libraries. The only scripts are `consent.js` and `quote.js`.
+- The quote form must never send data to a server: inputs have no `name` attributes and `quote.js` only builds a wa.me link on the visitor's device. If that ever changes, update the privacy policy in `build_legal`.

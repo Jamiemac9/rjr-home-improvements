@@ -9,7 +9,7 @@ Two parts: content APX Digital can use to promote the project, and content RJR c
 ### Portfolio card (short)
 
 **RJR Home Improvements**: emergency roofing website, Birmingham.
-94 pages built around one action: WhatsApp a photo of the problem. Local pages for 10 Birmingham and Solihull areas, written from each area's actual housing.
+95 pages built around one action: a short quote form that opens WhatsApp with the customer's details already written, ready for photos. Local pages for 10 Birmingham and Solihull areas, written from each area's actual housing.
 
 ### Portfolio page (long)
 
@@ -51,7 +51,7 @@ Use on the Google Business Profile, Facebook, Instagram or Nextdoor. Website: rj
 
 ### Website launch post
 
-Our new website is live: rjrhomeimprovements.com. If your roof is leaking or has storm damage, send us a photo on WhatsApp with your postcode: 07542 373810.
+Our new website is live: rjrhomeimprovements.com. If your roof is leaking or has storm damage, fill in the quick form on the site. It opens WhatsApp with your details ready, so you just add a photo and send. Or message 07542 373810.
 
 Family run. 45 years' combined experience. Birmingham and the West Midlands.
 

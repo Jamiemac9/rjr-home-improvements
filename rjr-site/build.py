@@ -62,8 +62,56 @@ def wa(msg):
     return "https://wa.me/%s?text=%s" % (SITE["whatsapp"], quote(msg))
 
 
-def wa_btn(msg, label="WhatsApp a photo", cls="btn btn--neon"):
-    return '<a class="%s" href="%s" rel="noopener">%s</a>' % (cls, e(wa(msg)), label)
+def quote_btn(label="Get a quote", cls="btn btn--neon", urgency=""):
+    """Jumps to the on-page quote form (which then opens WhatsApp pre-filled)."""
+    u = ' data-set-urgency="%s"' % urgency if urgency else ""
+    return '<a class="%s" href="#quote"%s>%s</a>' % (cls, u, label)
+
+
+URGENCY = [("emergency", "Emergency: water getting in, or something could fall"), ("urgent", "Urgent: this week"),
+           ("soon", "Soon: within a month"), ("quote", "Planning or quote only")]
+PROPERTY = ["Terraced", "Semi-detached", "Detached", "Bungalow", "Flat or maisonette", "Commercial", "Other"]
+REPLY = ["WhatsApp message", "Phone call"]
+WHEN = ["Any time", "Morning", "Afternoon", "Evening"]
+
+
+def _options(pairs, selected="", placeholder=None):
+    out = ['<option value="" disabled%s>%s</option>' % ("" if selected else " selected", placeholder)] if placeholder else []
+    for val, label in pairs:
+        out.append('<option value="%s"%s>%s</option>' % (e(label), " selected" if val == selected else "", e(label)))
+    return "".join(out)
+
+
+def quote_form(ctx=None, path="/"):
+    """Quote form: nothing is submitted to a server. quote.js turns the answers into a
+    WhatsApp message on the visitor's own device. Inputs have no name attributes, so a
+    no-JavaScript submit sends no personal data anywhere."""
+    ctx = ctx or {}
+    areas = [(a["slug"], "%s (%s)" % (a["name"], pcs(a))) for a in AREAS_O] + [("other", "Elsewhere in Birmingham / West Midlands")]
+    services = [(x["slug"], x["name"]) for x in SERVICES + GROUPS] + [("not-sure", "Not sure / something else")]
+    f = lambda label, fid, control, hint="": '<div class="field"><label for="%s">%s</label>%s%s</div>' % (fid, label, control, '<p class="hint">%s</p>' % hint if hint else "")
+    fields = [
+        f("Your name", "q-name", '<input id="q-name" type="text" autocomplete="name" required maxlength="80">'),
+        f("Postcode", "q-postcode", '<input id="q-postcode" type="text" autocomplete="postal-code" required maxlength="8" '
+          'pattern="^[A-Za-z]{1,2}[0-9][0-9A-Za-z]?( ?[0-9][A-Za-z]{2})?$" title="A UK postcode, e.g. B13 9AB (or just B13)">'),
+        f("What do you need?", "q-service", '<select id="q-service" required>%s</select>' % _options(services, ctx.get("service", ""), "Choose a service")),
+        f("How urgent is it?", "q-urgency", '<select id="q-urgency" required>%s</select>' % _options(URGENCY, ctx.get("urgency", ""), "Choose one")),
+        f("Area", "q-area", '<select id="q-area" required>%s</select>' % _options(areas, ctx.get("area", ""), "Choose your area")),
+        f("Property type", "q-property", '<select id="q-property">%s</select>' % _options([(x, x) for x in PROPERTY], "", "Choose (optional)")),
+        f("How should we reply?", "q-reply", '<select id="q-reply">%s</select>' % _options([(x, x) for x in REPLY], "WhatsApp message")),
+        f("Best time", "q-when", '<select id="q-when">%s</select>' % _options([(x, x) for x in WHEN], "Any time")),
+    ]
+    details = f("What's happening?", "q-details", '<textarea id="q-details" rows="4" required maxlength="800" '
+                'placeholder="e.g. Water coming through the bedroom ceiling when it rains. Tiles missing at the back."></textarea>')
+    return """<form class="qform" id="quote" action="#quote" data-wa="%s" data-page="%s" novalidate>
+  <div class="qgrid">%s</div>
+  %s
+  <label class="check"><input id="q-photos" type="checkbox" checked> I&rsquo;ll attach photos in WhatsApp before sending</label>
+  <p class="hint">Nothing is sent or stored by this website. Pressing the button opens WhatsApp with your answers written in; you check it, add photos and press send.</p>
+  <div class="cta-row"><button class="btn" type="submit">Continue to WhatsApp</button>%s</div>
+  <p class="qstatus" role="status" aria-live="polite"></p>
+  <noscript><p class="hint">This form needs JavaScript. You can <a href="https://wa.me/%s">message us on WhatsApp</a> directly or call %s.</p></noscript>
+</form>""" % (SITE["whatsapp"], e(path), "".join(fields), details, call_link("Or call " + SITE["phone"]), SITE["whatsapp"], SITE["phone"])
 
 
 def call_link(label=None):
@@ -147,7 +195,7 @@ def service_node(url, name, stype, desc, area=None):
 # --------------------------------------------------------------------------
 NAV = [("emergency", "Emergency", "/services/emergency-roof-repairs/"), ("services", "Services", "/services/"),
        ("areas", "Areas", "/areas/"), ("work", "Before &amp; after", "/our-work/"), ("reviews", "Reviews", "/reviews/"),
-       ("about", "About", "/about/")]
+       ("about", "About", "/about/"), ("contact", "Contact", "/contact/")]
 
 
 def header(key, msg):
@@ -158,14 +206,14 @@ def header(key, msg):
         items.append('<li><a href="%s"%s%s>%s</a></li>' % (u, cls, cur, t))
     return """<a class="skip" href="#main">Skip to content</a>
 <div class="topbar"><div class="wrap">
-  <p><span class="dot" aria-hidden="true"></span>Leak or storm damage? <a href="%s" rel="noopener">WhatsApp a photo</a></p>
+  <p><span class="dot" aria-hidden="true"></span>Leak or storm damage? <a href="#quote" data-set-urgency="emergency">Tell us here</a></p>
   <p><a href="%s">%s</a></p>
 </div></div>
 <header class="site-head"><div class="wrap">
   <a class="brand" href="/">RJR Home Improvements<small>Emergency roofing &middot; Brickwork &middot; Building &middot; Birmingham</small></a>
   <nav class="nav" aria-label="Main"><ul>%s</ul></nav>
   <div class="head-cta">%s</div>
-</div></header>""" % (e(wa(msg)), TEL, SITE["phone"], "".join(items), wa_btn(msg, "WhatsApp us"))
+</div></header>""" % (TEL, SITE["phone"], "".join(items), quote_btn())
 
 
 def crumbs_html(crumbs):
@@ -175,15 +223,16 @@ def crumbs_html(crumbs):
     return '<nav class="crumbs" aria-label="Breadcrumb"><div class="wrap"><ol>%s</ol></div></nav>' % "".join(lis)
 
 
-def cta_band(msg, headline):
+def cta_band(msg, headline, form=None, path="/"):
     return """<section class="cta" aria-labelledby="cta-h"><div class="wrap">
-  <h2 id="cta-h">%s</h2>
-  <div class="flow">
-    <p>WhatsApp a photo, your postcode and what&rsquo;s happening. From leaks and storm damage to gutter clearances and full re-roofs.</p>
+  <div class="flow cta-intro">
+    <h2 id="cta-h">%s</h2>
+    <p>Fill this in and it opens WhatsApp with everything written for you. Add your photos, press send, and we&rsquo;ll come back to you.</p>
     <a class="num" href="%s">%s</a>
-    <div class="cta-row">%s%s</div>
+    <p class="hint">Prefer to type it yourself? <a href="%s" rel="noopener">Open WhatsApp directly</a>.</p>
   </div>
-</div></section>""" % (e(headline), TEL, SITE["phone"], wa_btn(msg, "Message on WhatsApp", "btn"), call_link("Call instead"))
+  %s
+</div></section>""" % (e(headline), TEL, SITE["phone"], e(wa(msg)), quote_form(form, path))
 
 
 def footer():
@@ -202,6 +251,7 @@ def footer():
       <li><a href="/about/">About RJR</a></li><li><a href="/our-work/">Before &amp; after</a></li><li><a href="/reviews/">Reviews</a></li></ul></div>
     <div><h2>Areas</h2><ul><li><a href="/areas/">All areas</a></li>%s</ul></div>
     <div><h2>Contact</h2><ul>
+      <li><a href="/contact/">Get a quote</a></li>
       <li><a href="%s" rel="noopener">WhatsApp %s</a></li><li><a href="%s">Call %s</a></li>%s
       <li>%s</li><li>%s</li></ul>
       <h2 style="padding-top:var(--s-1)">Legal</h2><ul>
@@ -226,10 +276,10 @@ def consent_html():
 
 
 def mbar(msg):
-    return '<nav class="mbar" aria-label="Quick contact"><a class="wa" href="%s" rel="noopener">WhatsApp us</a><a class="call" href="%s">Call</a></nav>' % (e(wa(msg)), TEL)
+    return '<nav class="mbar" aria-label="Quick contact"><a class="wa" href="#quote">Get a quote</a><a class="call" href="%s">Call</a></nav>' % TEL
 
 
-def page(path, title, desc, body, key="", crumbs=None, schema=None, og="chim_a", msg=None, cta=None, preload=None, noindex=False):
+def page(path, title, desc, body, key="", crumbs=None, schema=None, og="chim_a", msg=None, cta=None, preload=None, noindex=False, form=None):
     msg = msg or "Hi RJR, I need help with my roof. Postcode: "
     url = BASE + path
     graph = [business_node(),
@@ -287,12 +337,13 @@ def page(path, title, desc, body, key="", crumbs=None, schema=None, og="chim_a",
 %(mbar)s
 %(consent)s
 <script src="/assets/consent.js?v=%(v)s" defer></script>
+<script src="/assets/quote.js?v=%(v)s" defer></script>
 </body>
 </html>
 """ % {"title": e(title), "desc": e(desc), "url": url, "robots": "noindex,nofollow" if DEMO else ("noindex,follow" if noindex else "index,follow,max-image-preview:large,max-snippet:-1"),
        "site": e(SITE["name"]), "ogimg": BASE + asset(MANIFEST[og]["stem"] + "-og.jpg"), "pre": pre, "v": VERSION, "fonts": FONTS,
        "ld": ld, "analytics": analytics, "header": header(key, msg), "crumbs": crumbs_html(crumbs) if crumbs else "", "body": body,
-       "cta": cta_band(msg, cta or "Send us a photo of the problem."), "footer": footer(), "mbar": mbar(msg), "consent": consent_html()}
+       "cta": cta_band(msg, cta or "Tell us what\u2019s wrong with the roof.", form, path), "footer": footer(), "mbar": mbar(msg), "consent": consent_html()}
     if not path.endswith(".html"):
         html = relativise(html, path)
     f = OUT / path.lstrip("/") / "index.html" if path.endswith("/") else OUT / path.lstrip("/")
@@ -424,7 +475,7 @@ def areas_list(rows):
 def page_hero(bg, labels, h1, answer_paras, facts, msg, buttons=True):
     spans = "".join("<span>%s</span>" % s for s in labels)
     ans = "".join("<p>%s</p>" % p for p in answer_paras)
-    cta = '<div class="cta-row">%s%s</div>' % (wa_btn(msg), call_link()) if buttons else ""
+    cta = '<div class="cta-row">%s%s</div>' % (quote_btn(), call_link()) if buttons else ""
     panel = '<div class="panel"><p class="label"><span>Key facts</span></p>%s</div>' % kv(facts) if facts else "<div></div>"
     return """<section class="hero hero--page">%s<div class="wrap">
   <p class="label">%s</p>
@@ -456,7 +507,7 @@ def emergency_block(area=None, idx="Urgent", full=True):
             ("WhatsApp us.", "Send the photos with your postcode and we'll come back to you about getting there and what it needs.")]
     return (band(idx, "Is it urgent%s?" % where,
                  '<p class="lede">These need looking at quickly. Anything else can wait for a normal quote.</p>%s<div class="cta-row">%s%s</div>'
-                 % (urgent, wa_btn("Emergency: my roof needs urgent help. Postcode: ", "WhatsApp an emergency", "btn"), call_link()),
+                 % (urgent, quote_btn("Report an emergency", "btn", "emergency"), call_link()),
                  "urgent", "band--neon", "var(--ink)")
             + ("" if not full else band("While you wait", "What to do right now.", steps(wait) + pull("fast"), "wait", "band--ink", "var(--neon)")))
 
@@ -488,7 +539,7 @@ def build_home():
     <div class="panel"><p class="label"><span>Key facts</span></p>%s</div>
   </div>
 </div></section>""" % (hero_bg(SITE["home_hero"]),
-                       wa_btn("Emergency: my roof needs urgent help. Postcode: "), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"), kv(facts))
+                       quote_btn(), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"), kv(facts))
     rows = [(svc_title(s), s["summary"], "/services/%s/" % s["slug"]) for s in SERVICES]
     services = band("01 &middot; Services", "Roofing first. Then everything else.",
                     index_list(rows, thumbs=[thumb(svc_hero(s)) for s in SERVICES]) + "<h3>Brickwork, stonework &amp; building</h3>"
@@ -584,7 +635,8 @@ def build_service(s):
     ans = fill(s["answer"])
     page(path, "%s in Birmingham | RJR" % s["kw"], ans[:152].rsplit(" ", 1)[0] + "…", head + toc(items) + body,
          key="emergency" if s["slug"] == "emergency-roof-repairs" else "services", crumbs=crumbs, schema=schema,
-         og=svc_hero(s), msg=msg, cta=s["cta"], preload=svc_hero(s))
+         og=svc_hero(s), msg=msg, cta=s["cta"], preload=svc_hero(s),
+         form={"service": s["slug"], "urgency": "emergency" if s.get("emergency") else ""})
 
 
 def build_group(g):
@@ -607,7 +659,8 @@ def build_group(g):
     items.append(("faq", "FAQ"))
     schema = [service_node(BASE + path, g["name"], g["name"], fill(g["answer"])), faq_node(BASE + path, faqs)]
     page(path, "%s in Birmingham | RJR" % g["kw"], fill(g["answer"])[:152].rsplit(" ", 1)[0] + "…",
-         head + toc(items) + body, key="services", crumbs=crumbs, schema=schema, og=g["hero"], msg=msg, cta=g["cta"], preload=g["hero"])
+         head + toc(items) + body, key="services", crumbs=crumbs, schema=schema, og=g["hero"], msg=msg, cta=g["cta"], preload=g["hero"],
+         form={"service": g["slug"]})
 
 
 def build_services_index():
@@ -659,7 +712,7 @@ def build_area(a, i):
     page(path, "Roofers in %s (%s) | Emergency Roof Repairs | RJR" % (a["name"], pcs(a)),
          "Family-run roofers in %s, %s: emergency roof repairs, leaks, storm damage, chimneys and flat roofs, with local advice for %s homes. WhatsApp %s." % (a["name"], pcs(a), a["name"], SITE["phone"]),
          head + toc(items) + body, key="areas", crumbs=crumbs, schema=schema, og=a["hero"], msg=msg,
-         cta="Roof problem in %s? Send a photo." % a["name"], preload=a["hero"])
+         cta="Roof problem in %s? Tell us here." % a["name"], preload=a["hero"], form={"area": a["slug"]})
 
 
 def build_area_service(a, s, i):
@@ -706,7 +759,8 @@ def build_area_service(a, s, i):
     desc = "%s in %s (%s). %s" % (s["name"], a["name"], pcs(a), lead)
     page(path, "%s in %s (%s) | RJR" % (s["kw"], a["name"], a["pcs"][0]), desc[:155].rsplit(" ", 1)[0] + "…",
          head + toc(items) + body, key="areas", crumbs=crumbs, schema=schema, og=svc_hero(s), msg=msg,
-         cta="%s in %s? Send a photo." % (s["name"], a["name"]), preload=svc_hero(s))
+         cta="%s in %s? Tell us here." % (s["name"], a["name"]), preload=svc_hero(s),
+         form={"area": a["slug"], "service": s["slug"], "urgency": "emergency" if s.get("emergency") else ""})
 
 
 def build_areas_index():
@@ -731,7 +785,7 @@ def build_work():
     page("/our-work/", "Before & After Roofing Photos, Birmingham | RJR",
          "Before and after photos of RJR Home Improvements jobs: chimney rebuild, gable fascias and guttering, Velux extension roof and re-roofing.",
          head + body, key="work", crumbs=[("Home", "/"), ("Before & after", "/our-work/")], og="velux_a", preload="velux_a",
-         cta="Want the same for your roof? Send a photo.")
+         cta="Want the same for your roof? Tell us here.")
 
 
 def build_reviews():
@@ -797,7 +851,7 @@ def build_legal():
                               "details and photos of the job that you send us",
                               "records of quotes, invoices and payments",
                               "messages between us, including on WhatsApp"],
-                             "This website does not have contact forms or accounts. It does not collect personal information unless you choose to contact us."]),
+                             "The quote form on this website does not send or store anything. When you press \u201cContinue to WhatsApp\u201d, it writes your answers into a WhatsApp message on your own device. Nothing reaches us unless you choose to send that message. The website has no accounts and does not collect personal information unless you contact us."]),
         ("How we use it and why", [["<b>To reply to you and give a quote</b>: taking steps at your request before entering a contract.",
                                     "<b>To carry out and manage the work</b>: performing our contract with you.",
                                     "<b>To keep financial records</b>: complying with our legal obligations, including tax law.",
@@ -825,9 +879,24 @@ def build_legal():
     ], "Cookie policy for RJR Home Improvements: no tracking cookies by default, optional analytics only with consent.")
 
 
+def build_contact():
+    head = page_hero("velux_a", ["Contact", "Birmingham &amp; West Midlands"], "Get a quote.",
+                     ["Fill in the form below. It opens WhatsApp with your answers written in, so you can add photos and send. For emergencies, you can also call %s." % SITE["phone"]],
+                     base_facts(), "", buttons=True)
+    nxt = [("Fill in the form", "Choose the service, how urgent it is and your area, and tell us what's happening."),
+           ("Add photos in WhatsApp", "WhatsApp opens with your message ready. Attach photos of the problem, inside and out, then press send."),
+           ("We come back to you", "We reply by WhatsApp or phone, whichever you chose, about what it needs and when we can get there.")]
+    body = band("How it works", "Three steps.", steps(nxt) + pull("fast"), "how", "band--ink", "var(--neon)")
+    schema = [{"@type": "ContactPage", "@id": BASE + "/contact/#contact", "url": BASE + "/contact/", "name": "Get a quote", "about": {"@id": BIZ}}]
+    page("/contact/", "Contact & Quotes | RJR Home Improvements, Birmingham Roofers",
+         "Get a roofing quote from RJR Home Improvements: fill in the form and it opens WhatsApp ready to send with your photos. Or call %s." % SITE["phone"],
+         head + body, key="contact", crumbs=[("Home", "/"), ("Contact", "/contact/")], schema=schema, og="velux_a", preload="velux_a",
+         cta="Tell us what\u2019s wrong with the roof.")
+
+
 def build_sitemap_page():
     ul = lambda rows: '<ul class="ruled">%s</ul>' % "".join('<li><a href="%s">%s</a></li>' % (u, e(n)) for n, u in rows)
-    core = [("Home", "/"), ("Services", "/services/"), ("Areas", "/areas/"), ("Before & after", "/our-work/"), ("Reviews", "/reviews/"),
+    core = [("Home", "/"), ("Contact", "/contact/"), ("Services", "/services/"), ("Areas", "/areas/"), ("Before & after", "/our-work/"), ("Reviews", "/reviews/"),
             ("About", "/about/"), ("Privacy policy", "/privacy-policy/"), ("Cookie policy", "/cookie-policy/")]
     blocks = ['<div class="flow-h"><h3>Pages</h3>%s</div>' % ul(core),
               '<div class="flow-h"><h3>Services</h3>%s</div>' % ul([(s["name"], "/services/%s/" % s["slug"]) for s in SERVICES + GROUPS])]
@@ -904,7 +973,7 @@ def main():
     shutil.copytree(ROOT / "static", OUT)
     MANIFEST = optimise(IMG, ROOT / "images", OUT / "assets" / "img")
     h = hashlib.md5()
-    for f in ("site.css", "consent.js"):
+    for f in ("site.css", "consent.js", "quote.js"):
         h.update((OUT / "assets" / f).read_bytes())
     VERSION = h.hexdigest()[:8]
     build_home()
@@ -922,6 +991,7 @@ def main():
     build_reviews()
     build_about()
     build_legal()
+    build_contact()
     build_sitemap_page()
     build_404()
     write_meta()

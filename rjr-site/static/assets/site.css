@@ -384,3 +384,39 @@ figcaption { text-transform: none; letter-spacing: 0.01em; }
 
 @media print { .nav, .head-cta, .cta, .foot-cols, .mbar, .ticker, .hero-bg, .consent, .topbar { display: none !important; } body { background: #fff; padding: 0; } .hero { color: #000; background: #fff; } .hero::before { content: none; } }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+/* ---------- quote form (in the neon CTA band) ---------- */
+.cta-intro { align-self: start; }
+.cta .hint a { font-weight: 600; }
+@media (min-width: 64rem) {
+  .cta .wrap { align-items: start; }
+  .cta .cta-intro { grid-column: 1 / span 5; }
+  .cta .qform { grid-column: 7 / span 6; }
+  .cta h2 { grid-column: auto; }
+}
+.qform { display: flex; flex-direction: column; gap: var(--s-1); background: var(--light); color: var(--ink); border: 6px solid var(--ink); padding: var(--s-1); }
+.qgrid { display: grid; gap: var(--s-h) var(--gutter); }
+@media (min-width: 40rem) { .qgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.field { display: flex; flex-direction: column; gap: var(--s-q); min-width: 0; }
+.field label { font-family: var(--f-mono); font-weight: 500; font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; }
+.qform input[type="text"], .qform select, .qform textarea {
+  width: 100%; min-height: 2.75rem; padding: 0.55em 0.7em;
+  font: inherit; font-size: max(1rem, var(--step-0)); line-height: 1.4; color: var(--ink);
+  background: #fff; border: 2px solid var(--ink); border-radius: 0; appearance: none; -webkit-appearance: none;
+}
+.qform select {
+  padding-right: 2.4em; cursor: pointer; text-overflow: ellipsis;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%230d0d0c' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.8em center; background-size: 0.75em;
+}
+.qform textarea { resize: vertical; min-height: 7rem; }
+.qform input:focus, .qform select:focus, .qform textarea:focus { outline: 3px solid var(--orange); outline-offset: 0; }
+.qform.tried :invalid { border-color: var(--orange); box-shadow: none; outline: 2px solid var(--orange); }
+.qform .check { display: grid; grid-template-columns: 1.4rem 1fr; gap: var(--s-h); align-items: center; font-weight: 600; cursor: pointer; }
+.qform .check input { width: 1.25rem; height: 1.25rem; accent-color: var(--ink); margin: 0; }
+.qform .hint { font-size: var(--step--1); color: var(--grey); max-width: 60ch; }
+.qform .btn { background: var(--ink); color: var(--neon); border-color: var(--ink); font-size: var(--step--1); }
+.qform .btn:hover { background: var(--orange); color: var(--ink); }
+.qstatus { font-weight: 600; }
+.qstatus:empty { display: none; }
+.hint { font-size: var(--step--1); }

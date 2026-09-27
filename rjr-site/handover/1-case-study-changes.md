@@ -18,10 +18,10 @@ Built by APX Digital. Source notes for writing the case study. Everything below 
 
 | Item | Detail |
 |---|---|
-| Pages | 94 indexable pages |
+| Pages | 95 indexable pages (94 + Contact, added in round 7) |
 | Breakdown | Home, services index, 12 roofing service pages, 3 grouped trade pages, areas index, 10 area pages, 60 area-and-service pages, before & after, reviews, about, privacy policy, cookie policy, sitemap |
 | Lead offer | Emergency roof repairs, storm damage and roof leaks |
-| Main call to action | WhatsApp a photo of the problem, with a message already filled in for that page (e.g. "Hi RJR, I'm in Moseley (B13) and need help with roof leak repairs.") |
+| Main call to action | Quote form on every page (dropdowns + details) that opens WhatsApp with a structured message, pre-set for that page's service and area. Originally a direct WhatsApp link with a message already filled in for that page (e.g. "Hi RJR, I'm in Moseley (B13) and need help with roof leak repairs.") |
 | Reviews | Linked to the Google Business Profile and Rated People; reviews shown word for word |
 | Questions answered | 217 different questions answered across the site |
 | Typical page length | About 800 words of real content (median) |
@@ -88,6 +88,17 @@ Changes:
 - Demo mode added. While the site is on a free Netlify or Cloudflare address, every page is hidden from search engines and robots.txt blocks crawlers. Switching it off at launch is one line.
 - Local preview error ("ERR_EMPTY_RESPONSE" on localhost:8080) traced to port 8080 already being used by two other programs on the Mac: the Hermes agent and an old test server. The preview script now finds a free port itself, prints the exact address, and opens it. Cursor's Live Server was moved to port 5500.
 
+### Round 7: quote form
+Feedback: needs a contact form with dropdowns that customers fill in before it goes to WhatsApp pre-filled.
+
+Changes:
+- Quote form on every page, plus a new Contact page (95 pages in total). Dropdowns: service, urgency, area, property type, reply method, best time. Text fields: name, postcode (checked and tidied, e.g. "b139ab" becomes "B13 9AB") and what's happening.
+- Pressing **Continue to WhatsApp** opens WhatsApp with a structured message: service, urgency, name, postcode, area, property, details, reply preference, and the page it came from. The customer adds photos and sends.
+- Each page pre-selects its own service and area, and "Emergency" on emergency pages. The "Report an emergency" and "Leak or storm damage?" links set urgency to Emergency before jumping to the form.
+- No data goes to a server: the form has no backend and its fields have no submit names, so even with JavaScript off nothing is sent. The privacy policy was updated to say so.
+- All "WhatsApp a photo" buttons, the header button and the mobile bar now go to the form ("Get a quote"). Call links still dial directly, and a plain "Open WhatsApp directly" link remains.
+- Checked: empty submits are blocked with the missing fields highlighted; all 95 pages have exactly one form; no overflow at 360px; 153 URLs crawled with zero 404s.
+
 ## Measured results (finished build)
 
 | Measure | Figure |
@@ -98,8 +109,8 @@ Changes:
 | Home hero background image | 18 KB |
 | Original photos supplied | 3.7 MB for 11 photos |
 | Typical photo as served | 78 KB (720px WebP; phones download the smallest size that fits) |
-| Pages that scroll sideways on a 360px phone | 0 of 94 |
-| Broken links or images | 0 (151 URLs crawled over HTTP) |
+| Pages that scroll sideways on a 360px phone | 0 of 95 |
+| Broken links or images | 0 (153 URLs crawled over HTTP) |
 | Pages with invalid structured data | 0 |
 | Duplicate page titles or descriptions | 0 |
 
