@@ -10,6 +10,7 @@ For RJR Home Improvements, from APX Digital. Updated 27 September 2026.
 | Preview link | [add demo link] |
 | Your web address | rjrhomeimprovements.com (to be bought) |
 | Visible on Google? | Not yet. The preview is hidden from search engines on purpose until your domain is live, so the preview copy doesn't compete with the real site. |
+| Company details | R.J.R Home Improvements Ltd, company no. 13349077, shown in the footer and privacy policy |
 | Checks done | Every page opened and every link followed: no broken pages or images. Tested on phone and desktop. |
 
 ## What you're getting
@@ -36,10 +37,9 @@ We have not added prices, response times, "24/7", guarantees or accreditations. 
 ## What we need from you to go live
 
 1. **Buy rjrhomeimprovements.com** (or let us buy it for you). The site is already set up for it.
-2. **Your company number** (from Companies House).
-3. **Your registered office address.**
-4. **Read the privacy policy** on the preview and tell us if anything is wrong, for example if you don't use a particular supplier, or you keep records for a different length of time.
-5. **Optional:** an email address for the site, and your ICO registration number if you have one.
+2. **Your registered office address** (for the privacy policy). Your company number, 13349077, is already added.
+3. **Read the privacy policy** on the preview and tell us if anything is wrong, for example if you don't use a particular supplier, or you keep records for a different length of time.
+4. **Optional:** an email address for the site, and your ICO registration number if you have one.
 
 Once we have these, going live takes about a day. We connect the domain, switch Google visibility on, submit the site to Google, and add the web address to your Google Business Profile and Rated People.
 

@@ -99,6 +99,10 @@ Changes:
 - All "WhatsApp a photo" buttons, the header button and the mobile bar now go to the form ("Get a quote"). Call links still dial directly, and a plain "Open WhatsApp directly" link remains.
 - Checked: empty submits are blocked with the missing fields highlighted; all 95 pages have exactly one form; no overflow at 360px; 153 URLs crawled with zero 404s.
 
+### Round 8: company details and backup
+- Companies House number 13349077 added to the footer, the privacy policy, the structured data (as the company identifier) and llms.txt.
+- Source code backed up to a private GitHub repository (Jamiemac9/rjr-home-improvements), with each change committed separately.
+
 ## Measured results (finished build)
 
 | Measure | Figure |
@@ -133,5 +137,5 @@ Not yet measured: Lighthouse / PageSpeed scores on the live host, Google ranking
 ## Still needed before launch
 
 - Buy rjrhomeimprovements.com and point it at the host.
-- Company number and registered office for the footer and privacy policy.
+- Registered office address for the privacy policy (company number 13349077 is in).
 - The business to read and approve the privacy policy.

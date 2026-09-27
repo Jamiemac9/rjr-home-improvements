@@ -169,6 +169,8 @@ def business_node():
     }
     if SITE["email"]:
         node["email"] = SITE["email"]
+    if SITE["company_number"]:
+        node["identifier"] = {"@type": "PropertyValue", "propertyID": "Companies House company number", "value": SITE["company_number"]}
     return node
 
 
@@ -941,6 +943,7 @@ def write_meta():
 
 ## Key facts
 - Legal name: %(legal)s
+- Companies House number: %(cn)s
 - Business type: family run
 - Lead services: emergency roof repairs, storm damage repairs, roof leak repairs
 - Trades: roofer, bricklayer, builder, blacksmith / metal worker
@@ -962,7 +965,7 @@ def write_meta():
 ## Recent reviews (verbatim, Rated People)
 %(revs)s
 """ % {"name": SITE["name"], "legal": SITE["legal_name"], "yrs": SITE["experience_years"], "label": SITE["rating_label"], "count": SITE["rating_count"],
-       "rp": SITE["rated_people"], "gbp": SITE["gbp"], "wa": SITE["whatsapp"], "phone": SITE["phone"], "about": " ".join(ABOUT),
+       "rp": SITE["rated_people"], "cn": SITE["company_number"] or "not listed", "gbp": SITE["gbp"], "wa": SITE["whatsapp"], "phone": SITE["phone"], "about": " ".join(ABOUT),
        "svc": svc, "areas": ars, "revs": revs}, encoding="utf-8")
 
 

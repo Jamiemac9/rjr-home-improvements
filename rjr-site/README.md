@@ -52,7 +52,7 @@ handover/                  case study notes, marketing content, client handover
 | Key | Why |
 |---|---|
 | `url` | Live domain, set to `https://rjrhomeimprovements.com`. Canonicals, sitemaps, Open Graph and schema all use it. |
-| `company_number` | Shown in the footer and privacy policy. |
+| `company_number` | Set to `13349077`. Shown in the footer, privacy policy, structured data and llms.txt. |
 | `registered_office` | Shown in the privacy policy. |
 | `email` (optional) | Adds email to footer, privacy policy and schema. |
 | `ico_number` (optional) | Adds ICO registration to the privacy policy. |
