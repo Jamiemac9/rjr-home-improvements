@@ -1,0 +1,21 @@
+[build]
+  command = "pip install -r requirements.txt && python3 build.py"
+  publish = "site"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+  # DEMO hides the site from Google while it's on the free netlify.app address.
+  # AT LAUNCH: delete this line, then redeploy.
+  DEMO = "1"
+
+# Send www to the main domain (only takes effect once the domain is connected)
+[[redirects]]
+  from = "https://www.rjrhomeimprovements.com/*"
+  to = "https://rjrhomeimprovements.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404

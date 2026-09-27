@@ -1,0 +1,7 @@
+__pycache__/
+.DS_Store
+# Built output: Netlify/Cloudflare rebuild it. Keep a local copy for drag-and-drop deploys.
+site/
+
+# Download bundles
+*.zip
