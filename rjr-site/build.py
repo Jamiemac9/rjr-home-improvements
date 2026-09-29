@@ -207,15 +207,18 @@ def header(key, msg):
         cur = ' aria-current="page"' if k == key else ""
         items.append('<li><a href="%s"%s%s>%s</a></li>' % (u, cls, cur, t))
     return """<a class="skip" href="#main">Skip to content</a>
+<div class="mast" data-mast>
 <div class="topbar"><div class="wrap">
   <p><span class="dot" aria-hidden="true"></span>Leak or storm damage? <a href="#quote" data-set-urgency="emergency">Tell us here</a></p>
   <p><a href="%s">%s</a></p>
 </div></div>
 <header class="site-head"><div class="wrap">
   <a class="brand" href="/">RJR Home Improvements<small>Emergency roofing &middot; Brickwork &middot; Building &middot; Birmingham</small></a>
-  <nav class="nav" aria-label="Main"><ul>%s</ul></nav>
+  <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav"><span class="when-closed">Menu</span><span class="when-open">Close</span></button>
+  <nav class="nav" id="site-nav" aria-label="Main"><ul>%s</ul></nav>
   <div class="head-cta">%s</div>
-</div></header>""" % (TEL, SITE["phone"], "".join(items), quote_btn())
+</div></header>
+</div>""" % (TEL, SITE["phone"], "".join(items), quote_btn())
 
 
 def crumbs_html(crumbs):
@@ -323,6 +326,7 @@ def page(path, title, desc, body, key="", crumbs=None, schema=None, og="chim_a",
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 %(pre)s<link rel="stylesheet" href="/assets/site.css?v=%(v)s">
+<noscript><style>@media (max-width:63.99rem){.nav{display:block !important}.nav-toggle{display:none !important}}</style></noscript>
 <link rel="preload" as="style" href="%(fonts)s" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="%(fonts)s"></noscript>
 <script type="application/ld+json">%(ld)s</script>
@@ -527,21 +531,15 @@ def build_home():
         ("Do you take on small jobs?", "Yes, from odd jobs as small as garden and gutter clearances to full refurbishments and replacements."),
         ("Where can I read reviews?", "On Google, through the RJR Business Profile, and on Rated People, where RJR is rated “Excellent” from %d ratings." % SITE["rating_count"]),
     ]
-    facts = [("Rating", "%s &middot; %d ratings" % (SITE["rating_label"], SITE["rating_count"])),
-             ("Reviews", "%s &middot; %s" % (ext(SITE["gbp"], "Google"), ext(SITE["rated_people"], "Rated People"))),
-             ("Experience", "%d years combined" % SITE["experience_years"]), ("Business", "Family run"),
-             ("WhatsApp", '<a href="%s" rel="noopener">%s</a>' % (e(wa("Hi RJR, I need help with my roof. Postcode: ")), SITE["phone"])),
-             ("Recent jobs", "B17 &middot; B30 &middot; B31 &middot; B90 &middot; WV4")]
     hero = """<section class="hero">%s<div class="wrap">
   <p class="label"><span>Emergency roofers</span><span>Birmingham &amp; West Midlands</span><span>Family run</span></p>
   <h1>Roof leak? Storm damage? <span class="hl">Emergency roof repairs</span> in Birmingham.</h1>
   <div class="hero-foot">
     <div class="flow"><p class="lede">WhatsApp a photo of the problem and your postcode. A family-run team with 45 years&rsquo; combined experience, from leaks and storm damage to full re-roofs.</p>
       <div class="cta-row">%s%s%s</div></div>
-    <div class="panel"><p class="label"><span>Key facts</span></p>%s</div>
   </div>
 </div></section>""" % (hero_bg(SITE["home_hero"]),
-                       quote_btn(), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"), kv(facts))
+                       quote_btn(), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"))
     rows = [(svc_title(s), s["summary"], "/services/%s/" % s["slug"]) for s in SERVICES]
     services = band("01 &middot; Services", "Roofing first. Then everything else.",
                     index_list(rows, thumbs=[thumb(svc_hero(s)) for s in SERVICES]) + "<h3>Brickwork, stonework &amp; building</h3>"
