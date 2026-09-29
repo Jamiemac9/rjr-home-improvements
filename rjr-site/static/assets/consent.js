@@ -48,3 +48,49 @@
   var open = document.querySelectorAll("[data-consent-open]");
   for (var k = 0; k < open.length; k++) open[k].addEventListener("click", show);
 })();
+
+/* Sticky mast: stays on screen, shortens after a short scroll,
+   and keeps the link list behind Menu on small screens. */
+(function () {
+  var mast = document.querySelector("[data-mast]");
+  if (!mast) return;
+  var nav = document.getElementById("site-nav");
+  var toggle = mast.querySelector(".nav-toggle");
+
+  function measure() {
+    document.documentElement.style.setProperty("--mast-h", mast.offsetHeight + "px");
+  }
+  function setOpen(open) {
+    mast.classList.toggle("is-open", open);
+    if (nav) nav.classList.toggle("is-open", open);
+    if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    measure();
+  }
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      setOpen(!mast.classList.contains("is-open"));
+    });
+  }
+  if (nav) {
+    nav.addEventListener("click", function (e) {
+      if (e.target.closest("a")) setOpen(false);
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && mast.classList.contains("is-open")) setOpen(false);
+  });
+
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      mast.classList.toggle("is-compact", window.scrollY > 12);
+      measure();
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", measure);
+  onScroll();
+})();
