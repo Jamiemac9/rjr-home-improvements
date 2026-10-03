@@ -1,0 +1,17 @@
+# Retired pages (Oct 2026 refocus on Bromsgrove, Rubery & Rednal). 301 = permanent.
+/services/guttering/            /services/guttering-fascias-soffits/  301
+/services/fascias-soffits/      /services/guttering-fascias-soffits/  301
+/services/velux-windows/        /services/roof-repairs/               301
+/services/roof-cleaning/        /services/roof-repairs/               301
+/services/roof-insulation/      /services/roof-repairs/               301
+/services/specialist-roofing/   /services/                            301
+/areas/northfield/*             /areas/longbridge-northfield/:splat   301
+/areas/edgbaston/*              /areas/                               301
+/areas/harborne/*               /areas/                               301
+/areas/moseley/*                /areas/                               301
+/areas/kings-heath/*            /areas/                               301
+/areas/hall-green/*             /areas/                               301
+/areas/shirley/*                /areas/                               301
+/areas/solihull/*               /areas/                               301
+/areas/stirchley/*              /areas/                               301
+/areas/selly-oak/*              /areas/                               301

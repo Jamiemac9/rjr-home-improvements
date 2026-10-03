@@ -1,9 +1,9 @@
 # RJR Home Improvements — website
 
-Static site for RJR Home Improvements (R.J.R Home Improvements Ltd), emergency roofers in Birmingham & the West Midlands.
+Static site for RJR Home Improvements (R.J.R Home Improvements Ltd), emergency roofers serving Bromsgrove, Rubery, Rednal and up to 20 miles around.
 Website by [APX Digital](https://apxdigital.io).
 
-- 95 indexable pages: home, contact, 12 roofing service pages, 3 grouped trade pages, 10 area pages, 60 area × service pages, before/after, reviews, about, privacy policy, cookie policy, sitemap (plus a 404).
+- 111 indexable pages: home, contact, 8 roofing service pages, 2 grouped trade pages, 13 area pages, 78 area × service pages, before/after, reviews, about, privacy policy, cookie policy, sitemap (plus a 404).
 - Plain HTML + one CSS file + two small scripts (cookie consent, quote form). No framework, no build tooling beyond Python.
 - Quote form on every page (and at `/contact/`): dropdowns for service, urgency, area, property type, reply method and time, plus name, postcode and details. It opens WhatsApp with the answers written in; the website never sends or stores them. Each page pre-selects its own service/area (and "Emergency" on emergency pages). Options live in `build.py` (`URGENCY`, `PROPERTY`, `REPLY`, `WHEN`); services and areas come from `content.py`.
 - Every internal link is relative, so the `site/` folder works on any host, in a sub-folder, or opened straight from disk.

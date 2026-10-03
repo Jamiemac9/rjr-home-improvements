@@ -15,6 +15,7 @@
   status = 301
   force = true
 
+# Page redirects for retired URLs live in static/_redirects (copied into site/).
 [[redirects]]
   from = "/*"
   to = "/404.html"

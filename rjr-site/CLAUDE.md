@@ -1,6 +1,6 @@
 # RJR Home Improvements website
 
-Static site for R.J.R Home Improvements Ltd (Companies House 13349077), emergency roofers in Birmingham. Built by APX Digital. Read `HANDOFF.md` for full history, current state and open items.
+Static site for R.J.R Home Improvements Ltd (Companies House 13349077), emergency roofers serving Bromsgrove, Rubery, Rednal and up to 20 miles around. Built by APX Digital. Read `HANDOFF.md` for full history, current state and open items.
 
 ## Commands
 
@@ -26,7 +26,7 @@ Always run `tools/check_site.py` after a change and before committing. It must p
 
 - **Facts only.** Never invent prices, response times, "24/7", guarantees, accreditations, insurance, job counts, staff names (only "Ryan", from reviews) or reviews. Reviews and `QUOTES` are verbatim.
 - **Photo pairs in `PROJECTS` are verified jobs.** Don't re-pair or relabel them.
-- **Design system:** colours only `--ink`, `--light`/`--light-2`, `--orange`, `--neon`. No border-radius, box-shadow, gradients or background highlights behind text. Font sizes only via `--step-*` clamp tokens; spacing only via `--s-*` and `gap`. Body text max 65ch. Must work at 360px with no horizontal scroll.
+- **Design system:** brand red and white from the logo: `--red` family, `--ink` (charcoal), `--light`/`--light-2`, `--grey`. White text on red. No border-radius, box-shadow, gradients or background highlights behind text. Font sizes only via `--step-*` clamp tokens; spacing only via `--s-*` and `gap`. Body text max 65ch. Must work at 360px with no horizontal scroll.
 - **Quote form sends nothing to a server.** Inputs have no `name` attributes; `quote.js` only builds a wa.me link. If that changes, update the privacy policy in `build_legal()`.
 - **Python 3.8+ compatible** `build.py`: no nested same-type quotes in f-strings (the file uses `%` formatting).
 - Internal URLs in templates are root-relative (`/services/...`); `relativise()` converts them per page. Don't hard-code `../`.
