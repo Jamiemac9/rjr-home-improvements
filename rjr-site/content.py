@@ -23,7 +23,7 @@ SITE = {
     "phone_intl": "+447542373810",
     "email": None,              # TODO optional: shown in footer, privacy policy and schema once set
     "company_number": "13349077",  # Companies House number, shown in footer + privacy policy
-    "registered_office": None,  # TODO: registered office address, shown in privacy policy
+    "registered_office": "246 Court Oak Road, Birmingham B32 2EG",  # from Companies House (vault note); client to confirm
     "ico_number": None,         # TODO optional: ICO registration number
     "rating_label": "Excellent",
     "rating_count": 127,

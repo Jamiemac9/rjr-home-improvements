@@ -7,10 +7,10 @@ For RJR Home Improvements, from APX Digital. Updated 27 September 2026.
 | | |
 |---|---|
 | Website | Built and ready: 95 pages, including a Contact page with a quote form |
-| Preview link | [add demo link] |
+| Preview link | https://super-gingersnap-d2d52f.netlify.app/ |
 | Your web address | rjrhomeimprovements.com (to be bought) |
 | Visible on Google? | Not yet. The preview is hidden from search engines on purpose until your domain is live, so the preview copy doesn't compete with the real site. |
-| Company details | R.J.R Home Improvements Ltd, company no. 13349077, shown in the footer and privacy policy |
+| Company details | R.J.R Home Improvements Ltd, company no. 13349077, registered office 246 Court Oak Road, Birmingham B32 2EG. Shown in the footer and privacy policy |
 | Checks done | Every page opened and every link followed: no broken pages or images. Tested on phone and desktop. |
 
 ## What you're getting
@@ -30,16 +30,18 @@ A website built to bring in roofing work across Birmingham and the West Midlands
 
 ## What we used
 
-Only what you gave us: your About text, your list of trades, your five Rated People reviews, your 127 ratings, your 11 photos, your WhatsApp number and your Google profile.
+Your About text, list of trades, 127 Rated People ratings and reviews, photos, WhatsApp number and Google Business Profile.
 
 We have not added prices, response times, "24/7", guarantees or accreditations. If any of these are true and you want them on the site, tell us and we'll add them.
 
 ## What we need from you to go live
 
 1. **Buy rjrhomeimprovements.com** (or let us buy it for you). The site is already set up for it.
-2. **Your registered office address** (for the privacy policy). Your company number, 13349077, is already added.
+2. **Confirm your registered office.** We've used 246 Court Oak Road, Birmingham B32 2EG (from Companies House) in the privacy policy. Your company number, 13349077, is already added.
 3. **Read the privacy policy** on the preview and tell us if anything is wrong, for example if you don't use a particular supplier, or you keep records for a different length of time.
 4. **Optional:** an email address for the site, and your ICO registration number if you have one.
+5. **Changes:** anything you want changed in the text, images or layout.
+6. **Pay the deposit** so we can take the site live once the domain is bought.
 
 Once we have these, going live takes about a day. We connect the domain, switch Google visibility on, submit the site to Google, and add the web address to your Google Business Profile and Rated People.
 

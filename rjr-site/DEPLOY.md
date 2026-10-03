@@ -62,7 +62,7 @@ If you deploy by drag-and-drop instead of GitHub: build with `python3 serve.py -
 4. **Tell Google**
    - Add the domain in Google Search Console and submit `https://rjrhomeimprovements.com/sitemap.xml`.
    - Add the website link to the Google Business Profile and the Rated People profile.
-5. **Before launch, fill in** `registered_office` in `content.py` (company number 13349077 is already set), and get the privacy policy approved by the client.
+5. **Before launch:** get the client to confirm the registered office (246 Court Oak Road, Birmingham B32 2EG, already in `content.py`) and approve the privacy policy.
 
 ## If something looks wrong
 

@@ -103,6 +103,11 @@ Changes:
 - Companies House number 13349077 added to the footer, the privacy policy, the structured data (as the company identifier) and llms.txt.
 - Source code backed up to a private GitHub repository (Jamiemac9/rjr-home-improvements), with each change committed separately.
 
+### Round 9: sticky header (made in Cursor, PR #1)
+- The header stays on screen, shortens after a short scroll, and collapses into a Menu button on small screens. Without JavaScript the full nav still shows.
+- The key facts panel was removed from the home page hero to keep the first screen focused on the headline and the quote button.
+- Checked afterwards with the new site check (`tools/check_site.py`): 95 pages, 153 URLs, no broken links, one form and one heading per page.
+
 ## Measured results (finished build)
 
 | Measure | Figure |
@@ -137,5 +142,5 @@ Not yet measured: Lighthouse / PageSpeed scores on the live host, Google ranking
 ## Still needed before launch
 
 - Buy rjrhomeimprovements.com and point it at the host.
-- Registered office address for the privacy policy (company number 13349077 is in).
+- Client to confirm the registered office (246 Court Oak Road, Birmingham B32 2EG, from Companies House) now shown in the privacy policy.
 - The business to read and approve the privacy policy.

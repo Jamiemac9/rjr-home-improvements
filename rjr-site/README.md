@@ -8,6 +8,8 @@ Website by [APX Digital](https://apxdigital.io).
 - Quote form on every page (and at `/contact/`): dropdowns for service, urgency, area, property type, reply method and time, plus name, postcode and details. It opens WhatsApp with the answers written in; the website never sends or stores them. Each page pre-selects its own service/area (and "Emergency" on emergency pages). Options live in `build.py` (`URGENCY`, `PROPERTY`, `REPLY`, `WHEN`); services and areas come from `content.py`.
 - Every internal link is relative, so the `site/` folder works on any host, in a sub-folder, or opened straight from disk.
 
+**New chat or new developer?** Start with [HANDOFF.md](HANDOFF.md) (state, history, open items) and [CLAUDE.md](CLAUDE.md) (rules and commands). Check a build with `python3 tools/check_site.py`.
+
 **Deploying?** See [DEPLOY.md](DEPLOY.md): Cursor setup, a demo on Netlify or Cloudflare before the domain is bought, and the launch checklist.
 
 ## Quick start
@@ -53,7 +55,7 @@ handover/                  case study notes, marketing content, client handover
 |---|---|
 | `url` | Live domain, set to `https://rjrhomeimprovements.com`. Canonicals, sitemaps, Open Graph and schema all use it. |
 | `company_number` | Set to `13349077`. Shown in the footer, privacy policy, structured data and llms.txt. |
-| `registered_office` | Shown in the privacy policy. |
+| `registered_office` | Set to 246 Court Oak Road, Birmingham B32 2EG (Companies House; client to confirm). Shown in the privacy policy. |
 | `email` (optional) | Adds email to footer, privacy policy and schema. |
 | `ico_number` (optional) | Adds ICO registration to the privacy policy. |
 | `home_hero` | Image key for the blurred home page hero background (currently the gable house photo). |
