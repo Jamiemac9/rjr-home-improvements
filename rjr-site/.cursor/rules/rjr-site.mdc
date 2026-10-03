@@ -19,13 +19,13 @@ alwaysApply: true
 - British English. Hedge legal/planning guidance ("may need consent", "check with the council").
 
 ## Design system (brutalist, typography-first)
-- Colours: ONLY `--ink`, `--light`/`--light-2`, `--orange`, `--neon`. Roles: ink = structure/dark bands, light = reading, orange = urgency/markers, neon = primary action.
+- Colours: ONLY the brand set from the logo: `--red` (+ `--red-deep` hover, `--red-bright` for red on charcoal, `--red-tint` quiet bands, `--red-line`), `--ink` (charcoal), `--light`/`--light-2` (white), `--grey`. Roles: white = reading, charcoal = structure and dark bands, red = brand, action and markers. White text on red only.
 - Never: border-radius, box-shadow, gradients, rounded cards, icon grids, centred hero with two rounded buttons, or a background highlight behind running text (use colour: `.hl`, `.hl-o`).
 - Type sizes only via `--step-*` tokens (fluid clamp, 1.250 → 1.333 modular scale). No px font sizes.
 - Spacing only via `--s-*` rhythm tokens and `gap`; elements carry no margins.
 - Body copy max 65ch. Display type Archivo 800/900 with tight tracking; labels IBM Plex Mono uppercase with +0.08em tracking.
 - Layout: asymmetric 12-col grid (`.col-idx` 3 / `.col-main` 9), sections split by rules, left-aligned.
-- Band order on pages: hero (photo + ink overlay) → light/alt bands → one ink band → neon CTA → ink footer.
+- Band order on pages: hero (photo + charcoal overlay) → white/alt bands → red urgent band → charcoal band → red CTA → charcoal footer. Logo (`static/assets/logo.webp`) in header and footer; never re-type the brand name as the logo.
 - Must work at 360px with no horizontal scroll; mobile bar (WhatsApp/Call) is fixed at the bottom.
 
 ## Performance

@@ -8,40 +8,40 @@ Two parts: content APX Digital can use to promote the project, and content RJR c
 
 ### Portfolio card (short)
 
-**RJR Home Improvements**: emergency roofing website, Birmingham.
-95 pages built around one action: a short quote form that opens WhatsApp with the customer's details already written, ready for photos. Local pages for 10 Birmingham and Solihull areas, written from each area's actual housing.
+**RJR Home Improvements**: emergency roofing website, Bromsgrove, Rubery & Rednal.
+111 pages built around one action: a short quote form that opens WhatsApp with the customer's details already written, ready for photos. Local pages for 13 areas within 20 miles of Bromsgrove, written from each area's actual housing.
 
 ### Portfolio page (long)
 
 RJR Home Improvements is a family-run roofing and building business with 45 years' combined experience, rated "Excellent" from 127 ratings on Rated People.
 
-We built one around emergency work: leaks, storm damage and roof repairs. Every page leads to one action, sending a photo on WhatsApp, and the message is already filled in with the page's area and service.
+We built their site around emergency work: leaks, storm damage and roof repairs, across Bromsgrove, Rubery, Rednal and up to 20 miles around. Every page leads to one action: a short quote form that opens WhatsApp with the customer's details written in, pre-set for that page's area and service.
 
-Local pages are written from the housing in each area. Moseley pages deal with slate roofs, tall chimneys and conservation rules. Shirley pages deal with concrete tiles and flat-roofed garages. Across the site, 217 different questions are answered.
+Local pages are written from the housing in each area. Rubery and Rednal pages deal with interwar semis and wind off the Lickey Hills. Redditch pages deal with new-town estates and felt flat roofs at the end of their life. Each page names the council that handles planning. Across the site, 229 different questions are answered.
 
-The site runs on plain HTML with 2 KB of JavaScript. The home page is 8 KB compressed. There are no tracking cookies unless a visitor opts in.
+The site uses RJR's logo and colours, and their own job photos, each before-and-after pair checked to be the same job. It runs on plain HTML with under 7 KB of JavaScript, and has no tracking cookies unless a visitor opts in.
 
 ### LinkedIn post
 
-New site live-ready for RJR Home Improvements, a family-run roofer in Birmingham.
+New site ready for RJR Home Improvements, a family-run roofer covering Bromsgrove, Rubery and Rednal.
 
 The brief: get local roofing work, especially emergencies.
 
 What we did:
-- Made one action the focus: WhatsApp a photo of the problem
+- Made one action the focus: a quick form that opens WhatsApp with the job already described
 - Wrote local pages from the real housing in each area, not the same page with the place name swapped
-- Answered 217 questions homeowners ask about leaks, storm damage, chimneys and flat roofs
-- Kept it fast: 8 KB home page, 2 KB of JavaScript
-- Used only what the client gave us: their words, their photos, their reviews
+- Answered 229 questions homeowners ask about leaks, storm damage, chimneys and flat roofs
+- Kept it fast: plain HTML, under 7 KB of JavaScript
+- Used only what the client gave us: their words, their photos, their reviews, their logo
 
 Website by APX Digital.
 
 ### Short lines (ads, social, proposals)
 
-- "One button: WhatsApp a photo of the problem."
+- "One form. WhatsApp opens with the job already written."
 - "Local pages written from local houses."
-- "217 homeowner questions answered, in plain English."
-- "8 KB home page. No tracking unless you say yes."
+- "229 homeowner questions answered, in plain English."
+- "No tracking unless you say yes."
 
 ---
 
@@ -53,7 +53,7 @@ Use on the Google Business Profile, Facebook, Instagram or Nextdoor. Website: rj
 
 Our new website is live: rjrhomeimprovements.com. If your roof is leaking or has storm damage, fill in the quick form on the site. It opens WhatsApp with your details ready, so you just add a photo and send. Or message 07542 373810.
 
-Family run. 45 years' combined experience. Birmingham and the West Midlands.
+Family run. 45 years' combined experience. Bromsgrove, Rubery, Rednal and up to 20 miles around. Free, no-obligation quotes.
 
 ### Emergency post (use after storms or heavy rain)
 
@@ -63,20 +63,28 @@ Roof damaged in the weather?
 3. Take photos.
 4. WhatsApp them to us with your postcode: 07542 373810.
 
-### Before & after posts (post the photos as a pair)
+### Before & after posts (post the photos as a set)
+
+**Extension re-roof**
+During: old covering off, new timber on site.
+After: new dark grey interlocking tiles and black guttering.
+Extension roof past its best? Send us a photo.
 
 **Chimney**
 Before: open joints, loose bricks and a cracked pot.
 After: rebuilt, repointed, new flaunching and a new pot.
 Chimney looking tired? Send us a photo.
 
+**Flat roof**
+Finished: a new mineral felt roof over a long single-storey extension, with flashing along the house wall.
+Flat roof leaking or ponding? Send us a photo.
+
 **Fascias and gutters**
 Before: black gable trims and gutters.
 After: white decorative bargeboards on all three gables, with new fascias, gutters and downpipes.
 
-**Extension roof with Velux**
-During: stripped to new membrane and battens, opening framed.
-After: re-tiled to match, with a new Velux roof window.
+**Lead flashing**
+New lead step flashing round a chimney, with lead dressed over the junction where a tiled roof meets a flat roof.
 
 ### Review posts (word for word)
 
@@ -88,12 +96,13 @@ Only use reviews word for word: whole sentences, no edits to spelling, no joinin
 
 ### Area posts (one per area, rotate monthly)
 
-- **Moseley:** Slate roofs, tall chimneys and conservation areas. We repair like for like. WhatsApp a photo: 07542 373810.
-- **Shirley:** Flat garage roof leaking again? If it leaks in more than one place, it's usually time to replace it. Send us a photo.
-- **Kings Heath:** Leak at the back of the house? It's often the valley between your back roof and next door's. Send us a photo.
-- **Stirchley:** Shared gutters don't always mean your neighbours need new ones too. Send us a photo first.
-- **Hall Green:** Hip and ridge tiles loose on a 1930s roof? The mortar under them has usually given up. Send us a photo.
+- **Bromsgrove:** Older terrace leaking at the back? It's often the valley between your back roof and next door's. Send us a photo.
+- **Rubery & Rednal:** Near the Lickey Hills, the wind finds loose ridges and verges first. Check yours from the ground after a storm, and send us a photo.
+- **Barnt Green & Lickey:** Leaves from mature trees block gutters and valleys every autumn. A clear-out costs far less than the leak it prevents.
+- **Catshill:** Flat garage roof leaking again? If it leaks in more than one place, it's usually time to replace it. Send us a photo.
+- **Redditch:** Felt on 1960s–80s porch and garage roofs has usually reached the end of its life. Send us a photo and we'll tell you if it's repair or replace.
+- **Alvechurch:** Old cottage roof? Repairs should match the original tiles or slates. We repair like for like.
 
 ### Asking for Google reviews (message to send after each job)
 
-Thanks for choosing RJR. If you're happy with the work, a quick Google review really helps other local people find us: [Google review link]
+Thanks for choosing RJR. If you're happy with the work, a quick Google review really helps other local people find us: https://share.google/tCzZuFxbWked7VhRY

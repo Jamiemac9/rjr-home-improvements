@@ -18,12 +18,12 @@ Built by APX Digital. Source notes for writing the case study. Everything below 
 
 | Item | Detail |
 |---|---|
-| Pages | 95 indexable pages (94 + Contact, added in round 7) |
-| Breakdown | Home, services index, 12 roofing service pages, 3 grouped trade pages, areas index, 10 area pages, 60 area-and-service pages, before & after, reviews, about, privacy policy, cookie policy, sitemap |
+| Pages | 111 indexable pages (after the round 10 refocus on Bromsgrove, Rubery & Rednal) |
+| Breakdown | Home, contact, services index, 8 roofing service pages, 2 grouped trade pages, areas index, 13 area pages, 78 area-and-service pages, before & after, reviews, about, privacy, cookie, sitemap |
 | Lead offer | Emergency roof repairs, storm damage and roof leaks |
 | Main call to action | Quote form on every page (dropdowns + details) that opens WhatsApp with a structured message, pre-set for that page's service and area. Originally a direct WhatsApp link with a message already filled in for that page (e.g. "Hi RJR, I'm in Moseley (B13) and need help with roof leak repairs.") |
 | Reviews | Linked to the Google Business Profile and Rated People; reviews shown word for word |
-| Questions answered | 217 different questions answered across the site |
+| Questions answered | 229 different questions answered across the site |
 | Typical page length | About 800 words of real content (median) |
 | Legal | Cookie consent banner, privacy policy, cookie policy |
 | Handover | Full source code, set up for editing in Cursor, with a README and design rules file |
@@ -103,18 +103,37 @@ Changes:
 - Companies House number 13349077 added to the footer, the privacy policy, the structured data (as the company identifier) and llms.txt.
 - Source code backed up to a private GitHub repository (Jamiemac9/rjr-home-improvements), with each change committed separately.
 
+### Round 9: sticky header (made in Cursor, PR #1)
+- The header stays on screen, shortens after a short scroll, and collapses into a Menu button on small screens. Without JavaScript the full nav still shows.
+- The key facts panel was removed from the home page hero to keep the first screen focused on the headline and the quote button.
+- Checked afterwards with the new site check (`tools/check_site.py`): 95 pages, 153 URLs, no broken links, one form and one heading per page.
+
+### Round 10: new area focus, brand and services
+Feedback: move the focus from Birmingham to Bromsgrove, Rubery, Rednal and up to 20 miles around; use the RJR logo and its red-and-white colours; link the active Google Business Profile; remove "Powered by Netlify"; drop zinc/metal and thatched roofs, Velux windows, roof cleaning and roof insulation; merge guttering with fascias and soffits; use the new photos accurately; keep pages useful and specific; update the form.
+
+Changes:
+- **Areas rebuilt.** 13 areas within 20 miles of Bromsgrove: Bromsgrove, Rubery, Rednal, Barnt Green & Lickey, Catshill, Alvechurch, Longbridge & Northfield, Kings Norton, Hagley, Halesowen, Redditch, Droitwich Spa, and Wythall & Hollywood. Each names its own planning council (Bromsgrove, Birmingham, Redditch, Wychavon or Dudley), and the split ones (Rubery, Wythall) say so.
+- **Two new local housing types.** Exposed ground near the Lickey and Clent Hills, and 1960s–80s new-town estates (Redditch, Droitwich). Each comes with specific questions and answers per service, so every area-and-service page has at least three local answers. Wording shared between area pages now averages about 42% across all 13 areas and 6 services (highest pair 70%, between areas with near-identical housing), down from about 45%.
+- **Search signals moved to Bromsgrove.** Titles, descriptions, structured data (service area set as a 20-mile circle round Bromsgrove), geo tags, sitemaps and llms.txt. The old Birmingham URLs redirect (301) to the nearest new page.
+- **Brand.** The client's logo in the header and footer; a matching favicon drawn from the logo's gable; colours changed from black/orange/neon to the logo's red and white with charcoal, and gentle colour transitions on links and buttons.
+- **Services.** Five removed from the site, menus, form and schema (still in the business's own trade list but not promoted). Guttering and downpipes merged with fascias, soffits and bargeboards into one roofline page. Velux, cleaning and insulation URLs redirect to roof repairs.
+- **New photos placed by what they show.** Extension re-roof (during and after, same house) on roof repairs; the large felt flat roof (two views) on flat roofs; the chimney lead flashing on leadwork, chimneys and roof leaks; the RJR van on the about and areas pages.
+- **"Powered by Netlify" removed.** It came from a script Netlify injects into hosted pages, not from the site. A Content Security Policy header now only allows scripts from the site's own files, which blocks it.
+- **Form.** Service list matches the new services; area list matches the new areas plus "Elsewhere within 20 miles of Bromsgrove". The mobile menu was checked: opens, closes, and its links work.
+- Checked: 111 pages, 195 URLs, 0 broken links, one form and one heading per page, 0 pages wider than a 360px phone.
+
 ## Measured results (finished build)
 
 | Measure | Figure |
 |---|---|
-| Home page HTML (compressed) | 8 KB |
-| Stylesheet (compressed) | 5 KB |
-| JavaScript | One file, under 2 KB (cookie consent only) |
+| Home page HTML (compressed) | 10 KB |
+| Stylesheet (compressed) | 7 KB |
+| JavaScript | Two small files, under 7 KB together (cookie consent + sticky header, and the quote form) |
 | Home hero background image | 18 KB |
-| Original photos supplied | 3.7 MB for 11 photos |
+| Original photos supplied | 17 photos plus the logo (11 in September, 6 in October) |
 | Typical photo as served | 78 KB (720px WebP; phones download the smallest size that fits) |
-| Pages that scroll sideways on a 360px phone | 0 of 95 |
-| Broken links or images | 0 (153 URLs crawled over HTTP) |
+| Pages that scroll sideways on a 360px phone | 0 of 111 |
+| Broken links or images | 0 (195 URLs crawled over HTTP) |
 | Pages with invalid structured data | 0 |
 | Duplicate page titles or descriptions | 0 |
 
@@ -137,5 +156,5 @@ Not yet measured: Lighthouse / PageSpeed scores on the live host, Google ranking
 ## Still needed before launch
 
 - Buy rjrhomeimprovements.com and point it at the host.
-- Registered office address for the privacy policy (company number 13349077 is in).
+- Client to confirm the registered office (246 Court Oak Road, Birmingham B32 2EG, from Companies House) now shown in the privacy policy.
 - The business to read and approve the privacy policy.

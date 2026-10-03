@@ -5,3 +5,4 @@ site/
 
 # Download bundles
 *.zip
+.claude/
