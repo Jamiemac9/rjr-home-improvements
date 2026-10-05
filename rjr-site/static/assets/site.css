@@ -470,3 +470,40 @@ figcaption { text-transform: none; letter-spacing: 0.01em; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
 .onsite { display: flex; flex-direction: column; gap: var(--s-q); max-width: 52rem; }
 .onsite img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 3px solid currentColor; }
+
+/* ---------- Bromsgrove main-area block + coverage ---------- */
+.hubarea a { display: grid; gap: var(--s-q); padding: var(--s-1); border: 3px solid var(--red); text-decoration: none; background: #fff; }
+.hubarea .n { font-family: var(--f-display); font-weight: 800; font-size: var(--step-5); line-height: 1; letter-spacing: -0.03em; color: var(--red); }
+.hubarea .d { color: var(--grey); max-width: var(--measure); }
+.hubarea a:hover { background: var(--red); }
+.hubarea a:hover .n, .hubarea a:hover .d, .hubarea a:hover .label { color: #fff; }
+.pills { display: flex; flex-wrap: wrap; gap: var(--s-h); }
+.pills li { border: 2px solid var(--red); background: #fff; padding: 0.3em 0.8em; font-weight: 600; max-width: none; }
+.near-line { font-size: var(--step--1); max-width: 60ch; }
+.near-line a { color: #fff; text-decoration-color: var(--red-bright); }
+
+/* ---------- before / after: unmistakable on every screen ---------- */
+.ba figure.is-after .frame { border-color: var(--red); }
+.ba figcaption b { color: var(--red); text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--f-mono); font-weight: 500; }
+.band--ink .ba figcaption b { color: var(--red-bright); }
+.frame .tag { font-size: var(--step-0); padding: 0.2em 0.8ch; letter-spacing: 0.08em; }
+@media (max-width: 39.99rem) {
+  .ba-row { grid-template-columns: 1fr; gap: var(--s-1); }
+  .ba-row > figure:last-child:nth-child(odd) { grid-column: auto; }
+}
+
+/* ---------- mobile refinements ---------- */
+@media (max-width: 47.99rem) {
+  .hero .wrap { gap: var(--s-1); padding-block: var(--s-1) var(--s-2); }
+  .hero--page .hero-foot .panel { display: none; }          /* key facts repeat on-page; keep the phone hero short */
+  .site-foot li { font-size: var(--step-0); }
+  .site-foot ul { gap: var(--s-h); }
+  .site-foot ul a { display: inline-block; padding-block: 0.2em; }
+  .crumbs ol { font-size: var(--step--2); }
+  .toc ol { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .toc li { flex: 0 0 auto; }
+  .toc a { display: inline-block; padding-block: 0.4em; }
+  .faq summary { padding-block: var(--s-1); }
+  .qform { padding: var(--s-h); border-width: 4px; }
+  .index-list a { padding-block: var(--s-1); }
+}

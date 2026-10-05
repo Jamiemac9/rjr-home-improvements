@@ -28,17 +28,27 @@ SITE = {
     "rating_label": "Excellent",
     "rating_count": 127,
     "experience_years": 45,
-    "lastmod": "2026-10-03",
+    "lastmod": "2026-10-05",
     # Service area: Bromsgrove, Rubery, Rednal and up to 20 miles around.
-    "region_short": "Bromsgrove, Rubery & Rednal",
-    "region_long": "Bromsgrove, Rubery, Rednal and up to 20 miles around",
+    "region_short": "Bromsgrove & surrounding areas",
+    "region_long": "Bromsgrove and the surrounding areas, including Rubery, Rednal and up to 20 miles around",
     "region_councils": "Bromsgrove District Council or Birmingham City Council",
     "radius_miles": 20,
     "geo": {"lat": 52.3354, "lng": -2.0595, "region": "GB-WOR", "placename": "Bromsgrove"},  # Bromsgrove town centre
-    "updated_human": "3 October 2026",
-    "home_hero": "fascia_b",   # home page hero background (key from IMG); image 12, the gable house
+    "updated_human": "5 October 2026",
+    "home_hero": "fascia_a",   # home page hero background (key from IMG): the gable house, finished in black
     "credit_name": "APX Digital",
     "credit_url": "https://apxdigital.io",
+    # Loaded only after "Accept analytics". build.py marks these scripts as consent-gated.
+    "analytics_html": """<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GCVKJDYLE4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GCVKJDYLE4');
+</script>
+""",
 }
 
 ABOUT = [
@@ -90,8 +100,8 @@ IMG = {
     "chim_a": ("chimney-after.jpg", "The same chimney stack after repair, with rebuilt oversailing courses, fresh pointing, new flaunching and a new terracotta pot", "56% 45%"),
     "velux_d": ("velux-extension-during.jpg", "Single-storey rear extension roof stripped to new breathable membrane and battens, with the opening framed for a roof window", "50% 52%"),
     "velux_a": ("velux-extension-after.jpg", "The same extension roof re-covered in pantiles with a new Velux roof window and lead flashing along the wall", "40% 58%"),
-    "fascia_b": ("gable-fascias-before.webp", "Detached house before work, with black gable trims, black gutters and downpipes, and scaffolding at both gable ends", "50% 45%"),
-    "fascia_a": ("gable-fascias-after.webp", "The same house after work, with new white decorative uPVC bargeboards on the gables and white fascias, gutters and downpipes", "55% 40%"),
+    "fascia_b": ("gable-white-before.webp", "Detached house with three front gables before work: white decorative bargeboards, white fascias and gutters, scaffold going up at the side", "55% 40%"),
+    "fascia_a": ("gable-black-after.webp", "The same house after work: new black bargeboards, fascias, gutters and downpipes on all three gables, matching the dark window frames", "50% 40%"),
     "tile_a": ("reroof-concrete-tiles.jpg", "Pitched roof newly re-covered in grey concrete tiles laid to straight courses", "50% 50%"),
     "tile_v": ("reroof-gable-verge.jpg", "Gable verge on the same new grey tile roof, bedded in mortar along the brick gable", "75% 25%"),
     "canopy_d": ("canopy-roof-stripping.webp", "Roofer stripping old clay tiles from a canopy roof over a garage door", "35% 40%"),
@@ -114,10 +124,10 @@ PROJECTS = {
                 ("After", "chim_a", "Oversailing courses rebuilt, stack repointed, new flaunching and terracotta pot.")],
     },
     "fascias": {
-        "title": "Gable bargeboards, fascias & guttering", "service": "guttering-fascias-soffits", "ratio": "4 / 3",
-        "intro": "A detached house with three front gables. Same house, same windows and nameplate, before and after.",
-        "seq": [("Before", "fascia_b", "Black gable trims, black gutters and downpipes; scaffold at both gable ends."),
-                ("After", "fascia_a", "White decorative uPVC bargeboards on every gable; white fascias, gutters and downpipes.")],
+        "title": "Gable roofline: white to black", "service": "guttering-fascias-soffits", "ratio": "4 / 3",
+        "intro": "A detached house with three front gables, changed from a white roofline to black. Same house, same windows, door and nameplate, before and after.",
+        "seq": [("Before", "fascia_b", "White decorative bargeboards, white fascias and gutters; scaffold going up at the side."),
+                ("After", "fascia_a", "New black bargeboards, fascias, gutters and downpipes on all three gables, matching the dark windows.")],
     },
     "velux": {
         "title": "Extension roof re-covered, with a new Velux window", "service": "roof-repairs", "ratio": "1 / 1",
@@ -491,7 +501,7 @@ SERVICES = [
         "cta": "Gutters overflowing or boards rotting? Send a photo.",
         "answer": "RJR Home Improvements clears, repairs and replaces the whole roofline in {area}: gutters and downpipes, fascias, soffits and bargeboards, in uPVC or timber. The gutters hang from the fascias, so the two are best looked at together. No job is too small; gutter clearances are part of what we do.",
         "intro": ["The roofline does two jobs. Fascias, soffits and bargeboards close off the edge of the roof and carry the gutters; the gutters and downpipes take rainwater away from the walls. When one fails, the other usually follows: a blocked gutter soaks the fascia behind it, and a rotten fascia lets the gutter sag.",
-                  "The house in our photos had its black gable trims, gutters and downpipes replaced with white decorative uPVC bargeboards on all three gables, plus new white fascias, gutters and downpipes."],
+                  "The house in our photos had its white decorative bargeboards, fascias and gutters replaced in black on all three gables, with new black downpipes, so the whole roofline now matches the dark window frames."],
         "options": [("uPVC boards", "Most homes", "Little maintenance beyond cleaning; plain or decorative profiles."),
                     ("Timber boards", "Period homes and some conservation areas", "Traditional look; needs regular painting."),
                     ("uPVC gutters", "Most homes", "Light and low-maintenance; joint seals age and are the usual leak point."),
@@ -593,11 +603,12 @@ DMBC = "Dudley Metropolitan Borough Council"
 
 AREAS = [
     {
-        "slug": "bromsgrove", "quote": "roofing", "name": "Bromsgrove", "pcs": ["B60", "B61"], "council": BDC, "hero": "ext_a",
+        "slug": "bromsgrove", "geo": (52.3354, -2.0595), "quote": "roofing", "name": "Bromsgrove", "pcs": ["B60", "B61"], "council": BDC, "hero": "ext_a",
         "stock": "Bromsgrove is a market town in north Worcestershire. Victorian and Edwardian terraces sit close to the High Street, with interwar and post-war semis and newer estates spreading out through areas such as Sidemoor, Charford, Aston Fields and Lickey End.",
         "planning": "Bromsgrove District Council handles planning and has several conservation areas, including the town centre. Like-for-like roof repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["slate", "concrete", "shared_stacks", "outriggers", "hips", "flat_ext", "conservation"],
         "near": ["catshill", "barnt-green-lickey", "alvechurch", "droitwich-spa"], "reviews": [],
+        "covers": ["Bromsgrove town centre", "Sidemoor", "Charford", "Aston Fields", "Lickey End", "Marlbrook", "Burcot", "Finstall", "Stoke Prior", "Stoke Heath", "Blackwell", "Fairfield", "Belbroughton", "Hopwood"],
         "faqs": [
             ("Which parts of Bromsgrove do you cover?", "All of it, including the town centre, Sidemoor, Charford, Aston Fields, Lickey End and Marlbrook, plus the villages around the town. Put your postcode in the quote form and we'll come back to you."),
             ("Is my Bromsgrove house in a conservation area?", "Bromsgrove District Council publishes its conservation area boundaries, which include the town centre. If you're inside one, repairs should match the existing materials, and changes to how the roof looks may need consent."),
@@ -605,7 +616,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "rubery", "quote": "tidy", "name": "Rubery", "pcs": ["B45"], "council": "Birmingham City Council or Bromsgrove District Council", "hero": "flat_a1",
+        "slug": "rubery", "geo": (52.395, -2.021), "quote": "tidy", "name": "Rubery", "pcs": ["B45"], "council": "Birmingham City Council or Bromsgrove District Council", "hero": "flat_a1",
         "stock": "Rubery sits at the foot of the Lickey Hills on the old Bristol Road, where Birmingham meets Bromsgrove district. Most homes are interwar and post-war semi-detached houses, with later estates from the 1960s and 70s around them.",
         "planning": "Rubery is split between Birmingham City Council and Bromsgrove District Council, so check which one covers your address before changing how a roof looks. Like-for-like repairs are usually straightforward.",
         "features": ["concrete", "hips", "canopies", "shared_stacks", "flat_ext", "garages", "exposed"],
@@ -617,7 +628,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "rednal", "quote": "diagnosis", "name": "Rednal", "pcs": ["B45"], "council": BCC, "hero": "lead_a",
+        "slug": "rednal", "geo": (52.393, -1.998), "quote": "diagnosis", "name": "Rednal", "pcs": ["B45"], "council": BCC, "hero": "lead_a",
         "stock": "Rednal is on Birmingham's south-western edge, right up against the Lickey Hills Country Park. Most homes are interwar and post-war semi-detached houses, typically with hipped roofs, bay windows and porch canopies, with later estates around them.",
         "planning": "Rednal is in Birmingham City Council's area. Like-for-like roof repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["concrete", "hips", "canopies", "shared_stacks", "flat_ext", "trees", "exposed"],
@@ -629,7 +640,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "barnt-green-lickey", "quote": "finish", "name": "Barnt Green & Lickey", "pcs": ["B45", "B60"], "council": BDC, "hero": "chim_a",
+        "slug": "barnt-green-lickey", "geo": (52.367, -2.008), "quote": "finish", "name": "Barnt Green & Lickey", "pcs": ["B45", "B60"], "council": BDC, "hero": "chim_a",
         "stock": "Barnt Green and Lickey are villages on the southern slopes of the Lickey Hills. Many homes are large detached houses set among mature trees, alongside smaller interwar and post-war houses.",
         "planning": "Bromsgrove District Council handles planning. Some roads have conservation-area controls and many trees here may be protected, so check before changing how a roof looks or cutting back trees.",
         "features": ["clay", "stacks", "trees", "exposed", "hips", "flat_ext", "conservation"],
@@ -641,7 +652,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "catshill", "quote": "scaffold", "name": "Catshill", "pcs": ["B61"], "council": BDC, "hero": "tile_a",
+        "slug": "catshill", "geo": (52.36, -2.063), "quote": "scaffold", "name": "Catshill", "pcs": ["B61"], "council": BDC, "hero": "tile_a",
         "stock": "Catshill is a large village just north of Bromsgrove. Most homes are post-war and later: semi-detached and detached houses, bungalows, and estates from the 1960s onwards.",
         "planning": "Catshill is in Bromsgrove District Council's area. Like-for-like repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["concrete", "hips", "canopies", "flat_ext", "garages", "dryfix", "shared_stacks"],
@@ -653,7 +664,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "alvechurch", "quote": "leak", "name": "Alvechurch", "pcs": ["B48"], "council": BDC, "hero": "chim_b2",
+        "slug": "alvechurch", "geo": (52.351, -1.966), "quote": "leak", "name": "Alvechurch", "pcs": ["B48"], "council": BDC, "hero": "chim_b2",
         "stock": "Alvechurch is a village between Bromsgrove and Redditch on the Worcester and Birmingham Canal. Older cottages and Victorian houses sit around the village centre, with post-war and newer housing around them.",
         "planning": "Parts of the village centre are a conservation area under Bromsgrove District Council, so visible roof repairs there should match the original materials. Elsewhere, like-for-like repairs are usually straightforward.",
         "features": ["clay", "slate", "stacks", "shared_stacks", "conservation", "concrete", "flat_ext", "garages"],
@@ -665,7 +676,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "longbridge-northfield", "quote": "tidy", "name": "Longbridge & Northfield", "pcs": ["B31"], "council": BCC, "hero": "ext_d",
+        "slug": "longbridge-northfield", "geo": (52.405, -1.975), "quote": "tidy", "name": "Longbridge & Northfield", "pcs": ["B31"], "council": BCC, "hero": "ext_d",
         "stock": "Longbridge and Northfield sit along the Bristol Road between Rubery and south Birmingham. Northfield is mostly interwar and post-war semis, with older terraces near the village centre; Longbridge has new housing on the former car-plant site alongside older estates.",
         "planning": "Birmingham City Council handles planning. Like-for-like roof repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["concrete", "hips", "canopies", "shared_stacks", "flat_ext", "garages", "dryfix"],
@@ -677,7 +688,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "kings-norton", "quote": "gutters", "name": "Kings Norton", "pcs": ["B30", "B38"], "council": BCC, "hero": "fascia_b",
+        "slug": "kings-norton", "geo": (52.408, -1.928), "quote": "gutters", "name": "Kings Norton", "pcs": ["B30", "B38"], "council": BCC, "hero": "fascia_b",
         "stock": "Kings Norton has a historic village centre around The Green, with Victorian and Edwardian terraces towards Cotteridge and large interwar and post-war estates further out.",
         "planning": "Kings Norton Green is a conservation area, so visible roof work there should match the original materials. Elsewhere, Birmingham City Council handles planning and like-for-like repairs are usually straightforward.",
         "features": ["slate", "shared_stacks", "outriggers", "concrete", "hips", "flat_ext", "conservation"],
@@ -689,7 +700,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "hagley", "quote": "finish", "name": "Hagley", "pcs": ["DY9"], "council": BDC, "hero": "flat_a2",
+        "slug": "hagley", "geo": (52.425, -2.135), "quote": "finish", "name": "Hagley", "pcs": ["DY9"], "council": BDC, "hero": "flat_a2",
         "stock": "Hagley is a village at the foot of the Clent Hills, between Stourbridge and Bromsgrove. Most homes are interwar and post-war detached and semi-detached houses, many on large plots with mature gardens.",
         "planning": "Hagley is in Worcestershire, and Bromsgrove District Council handles planning. Check with the council whether your road has conservation-area controls before changing how a roof looks.",
         "features": ["concrete", "clay", "hips", "trees", "exposed", "flat_ext", "garages"],
@@ -701,7 +712,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "halesowen", "quote": "diagnosis", "name": "Halesowen", "pcs": ["B62", "B63"], "council": DMBC, "hero": "chim_b1",
+        "slug": "halesowen", "geo": (52.449, -2.05), "quote": "diagnosis", "name": "Halesowen", "pcs": ["B62", "B63"], "council": DMBC, "hero": "chim_b1",
         "stock": "Halesowen is a Black Country market town between Birmingham and the Clent Hills. Victorian terraces sit close to the town centre, with interwar and post-war semis and later estates around them.",
         "planning": "Dudley Metropolitan Borough Council handles planning in Halesowen. Like-for-like roof repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["slate", "shared_stacks", "outriggers", "concrete", "hips", "flat_ext", "exposed"],
@@ -713,7 +724,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "redditch", "quote": "roofing", "name": "Redditch", "pcs": ["B97", "B98"], "council": RBC, "hero": "flat_a1",
+        "slug": "redditch", "geo": (52.306, -1.94), "quote": "roofing", "name": "Redditch", "pcs": ["B97", "B98"], "council": RBC, "hero": "flat_a1",
         "stock": "Redditch was designated a new town in 1964, so much of it is estates built in the 1960s, 70s and 80s, such as Winyates, Matchborough and Church Hill, around an older centre with Victorian and Edwardian terraces.",
         "planning": "Redditch Borough Council handles planning. Like-for-like repairs are usually straightforward; check with the council before changing how a roof looks.",
         "features": ["newtown", "concrete", "flat_ext", "garages", "canopies", "slate", "outriggers"],
@@ -725,7 +736,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "droitwich-spa", "quote": "scaffold", "name": "Droitwich Spa", "pcs": ["WR9"], "council": WDC, "hero": "ext_a",
+        "slug": "droitwich-spa", "geo": (52.267, -2.152), "quote": "scaffold", "name": "Droitwich Spa", "pcs": ["WR9"], "council": WDC, "hero": "ext_a",
         "stock": "Droitwich Spa grew around its brine springs. Victorian and Edwardian houses sit near the town centre, with large estates from the 1960s onwards around it.",
         "planning": "Wychavon District Council handles planning in Droitwich Spa, and parts of the historic centre are conservation areas. Check before changing how a roof looks.",
         "features": ["newtown", "concrete", "flat_ext", "garages", "slate", "shared_stacks", "conservation"],
@@ -737,7 +748,7 @@ AREAS = [
         ],
     },
     {
-        "slug": "wythall-hollywood", "quote": "fast", "name": "Wythall & Hollywood", "pcs": ["B47"], "council": BDC, "hero": "velux_a",
+        "slug": "wythall-hollywood", "geo": (52.387, -1.87), "quote": "fast", "name": "Wythall & Hollywood", "pcs": ["B47"], "council": BDC, "hero": "velux_a",
         "stock": "Wythall and Hollywood sit along the Alcester Road between south Birmingham and the Worcestershire countryside. Most homes are interwar and post-war semi-detached and detached houses, with newer estates.",
         "planning": "Wythall is in Bromsgrove District Council's area, though roads near the city edge can fall under Birmingham City Council. Check which council covers your address before changing how a roof looks.",
         "features": ["concrete", "hips", "canopies", "flat_ext", "garages", "dryfix", "shared_stacks"],
