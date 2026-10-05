@@ -30,8 +30,21 @@ DEMO = os.environ.get("DEMO", "").lower() in ("1", "true", "yes")
 SVC = {s["slug"]: s for s in SERVICES + GROUPS}
 MATRIX = [s for s in SERVICES if s.get("matrix")]
 AREA = {a["slug"]: a for a in AREAS}
-ORDER = ["bromsgrove", "rubery", "rednal", "barnt-green-lickey", "catshill", "alvechurch", "longbridge-northfield", "kings-norton",
-         "hagley", "halesowen", "redditch", "droitwich-spa", "wythall-hollywood"]
+import math
+
+
+def miles_between(p, q):
+    """Straight-line distance in miles between two (lat, lng) points."""
+    la1, lo1, la2, lo2 = map(math.radians, (p[0], p[1], q[0], q[1]))
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return 2 * 3958.8 * math.asin(math.sqrt(h))
+
+
+HUB_AREA = "bromsgrove"
+FOCUS_AREAS = ["rubery", "rednal"]          # niche areas promoted straight after Bromsgrove
+_HUB_GEO = AREA[HUB_AREA]["geo"]
+ORDER = [HUB_AREA] + FOCUS_AREAS + sorted((a for a in AREA if a not in [HUB_AREA] + FOCUS_AREAS),
+                                          key=lambda slug: miles_between(_HUB_GEO, AREA[slug]["geo"]))
 AREAS_O = [AREA[s] for s in ORDER]
 REV = {r["id"]: r for r in REVIEWS}
 PAGES = []
@@ -44,7 +57,20 @@ PROJECT_ROTA = ["extension", "flatroof", "chimney", "fascias", "leadflash"]
 # Trades RJR lists but asked not to promote on the site (Oct 2026).
 HIDDEN_TRADES = {"Thatched Roof", "Velux / Skylight Window", "Roof Cleaning", "Roof Insulation", "Zinc / Metal Roof"}
 REGION = SITE["region_short"]
-TITLE_REGION = "Bromsgrove, Rubery & Rednal"
+TITLE_REGION = "Bromsgrove & Surrounding Areas"
+AREAS_LABEL = "Bromsgrove & surrounding areas"   # breadcrumb label for /areas/
+
+
+def from_hub(a):
+    """'about 4 miles from Bromsgrove' for surrounding areas; '' for Bromsgrove itself."""
+    if a["slug"] == HUB_AREA:
+        return ""
+    return "about %d miles from Bromsgrove" % max(1, round(miles_between(_HUB_GEO, a["geo"])))
+
+
+def area_tag(a):
+    d = from_hub(a)
+    return pcs(a) + (" &middot; %s mi" % d.split()[1] if d else " &middot; main area")
 
 
 # --------------------------------------------------------------------------
@@ -166,7 +192,7 @@ def business_node():
         "telephone": SITE["phone_intl"], "description": " ".join(ABOUT),
         "image": BASE + asset(MANIFEST["chim_a"]["stem"] + "-og.jpg"), "hasMap": SITE["gbp"],
         "knowsAbout": [s["name"] for s in SERVICES] + sorted({t for ts in TRADES.values() for t in ts if t not in HIDDEN_TRADES}),
-        "areaServed": [area_circle()] + [{"@type": "Place", "name": "%s (%s)" % (a["name"], pcs(a))} for a in AREAS_O],
+        "areaServed": [{"@type": "City", "name": "Bromsgrove"}, area_circle()] + [{"@type": "Place", "name": "%s (%s)" % (a["name"], pcs(a))} for a in AREAS_O[1:]],
         "contactPoint": {"@type": "ContactPoint", "telephone": SITE["phone_intl"], "contactType": "customer service",
                          "areaServed": "GB", "availableLanguage": "en-GB"},
         "sameAs": [SITE["gbp"], SITE["rated_people"].split("#")[0]],
@@ -197,7 +223,7 @@ def faq_node(url, faqs):
 def service_node(url, name, stype, desc, area=None):
     served = ({"@type": "Place", "name": area["name"], "address": {"@type": "PostalAddress", "addressLocality": area["name"],
                "postalCode": area["pcs"][0], "addressRegion": "West Midlands", "addressCountry": "GB"}}
-              if area else [area_circle()] + [{"@type": "Place", "name": a["name"]} for a in AREAS_O])
+              if area else [{"@type": "City", "name": "Bromsgrove"}, area_circle()] + [{"@type": "Place", "name": a["name"]} for a in AREAS_O[1:]])
     return {"@type": "Service", "@id": url + "#service", "name": name, "serviceType": stype, "provider": {"@id": BIZ},
             "areaServed": served, "description": desc}
 
@@ -443,9 +469,10 @@ def pull(key):
 
 def figure(kind, key, cap, n):
     cls = {"After": "after", "Completed": "after", "During": "during"}.get(kind, "")
-    sizes = {1: "(min-width: 64rem) 40vw, 100vw", 2: "(min-width: 64rem) 32vw, 50vw"}.get(n, "(min-width: 64rem) 21vw, 50vw")
-    return '<figure><div class="frame">%s<span class="tag %s">%s</span></div><figcaption>%s</figcaption></figure>' % (
-        img(key, sizes), cls, kind, e(cap))
+    sizes = {1: "(min-width: 64rem) 40vw, 100vw", 2: "(min-width: 64rem) 32vw, (min-width: 40rem) 50vw, 100vw"}.get(n, "(min-width: 64rem) 21vw, (min-width: 40rem) 33vw, 100vw")
+    stage = "is-after" if cls == "after" else ("is-during" if cls == "during" else "is-before")
+    return '<figure class="%s"><div class="frame">%s<span class="tag %s">%s</span></div><figcaption><b>%s.</b> %s</figcaption></figure>' % (
+        stage, img(key, sizes), cls, kind, kind, e(cap))
 
 
 def project_html(key, n=None):
@@ -511,8 +538,22 @@ def base_facts():
             ("WhatsApp", '<a href="%s" rel="noopener">%s</a>' % (e(wa("Hi RJR, I need help with my roof. Postcode: ")), SITE["phone"]))]
 
 
+def near_line():
+    links = " &middot; ".join('<a href="/areas/%s/">%s</a>' % (a["slug"], e(a["name"])) for a in AREAS_O[1:7])
+    return 'Also covering %s <a href="/areas/">and more &rarr;</a>' % links
+
+
+def areas_block():
+    hub = AREA[HUB_AREA]
+    rest = AREAS_O[1:]
+    return ("""<div class="hubarea"><a href="/areas/%s/"><span class="label"><span>Main area</span><span>%s</span></span><span class="n">%s</span><span class="d">%s</span></a></div>"""
+            % (hub["slug"], pcs(hub), e(hub["name"]), e("Including " + ", ".join(hub["covers"][1:8]) + " and more."))
+            + "<h3>Surrounding areas</h3><p>Rubery and Rednal first, then nearest to Bromsgrove. Distances are straight-line from Bromsgrove town centre.</p>"
+            + areas_list([(a["name"], area_tag(a), "/areas/%s/" % a["slug"]) for a in rest]))
+
+
 def ticker():
-    words = ["Emergency roof repairs", "Storm damage", "Roof leaks", "Chimneys", "Flat roofs", "Guttering &amp; fascias", "Bromsgrove", "Rubery", "Rednal"]
+    words = ["Emergency roof repairs", "Storm damage", "Roof leaks", "Chimneys", "Flat roofs", "Guttering &amp; fascias", "Bromsgrove &amp; surrounding areas"]
     line = "".join("<span>%s</span><span>&#9632;</span>" % w for w in words)
     return '<div class="ticker" aria-hidden="true"><div class="ticker-track"><p>%s</p><p>%s</p></div></div>' % (line, line)
 
@@ -537,9 +578,9 @@ def emergency_block(area=None, idx="Urgent", full=True):
 # --------------------------------------------------------------------------
 def build_home():
     faqs = [
-        ("Do you do emergency roof repairs in Bromsgrove, Rubery and Rednal?", "Yes. RJR Home Improvements repairs roof leaks, storm damage, slipped and missing tiles, damaged chimneys and failed flashing across Bromsgrove, Rubery, Rednal and up to %d miles around. Fill in the quote form or WhatsApp a photo and your postcode to %s." % (SITE["radius_miles"], SITE["phone"])),
+        ("Do you do emergency roof repairs in Bromsgrove and the surrounding areas?", "Yes. RJR Home Improvements repairs roof leaks, storm damage, slipped and missing tiles, damaged chimneys and failed flashing across Bromsgrove and the surrounding areas, including Rubery and Rednal, up to %d miles around. Fill in the quote form or WhatsApp a photo and your postcode to %s." % (SITE["radius_miles"], SITE["phone"])),
         ("What should I do if my roof is leaking right now?", SVC["emergency-roof-repairs"]["faqs"][0][1]),
-        ("Which areas do you cover?", "Bromsgrove, Rubery, Rednal and up to %d miles around, including %s. Recent verified reviews come from B17, B30, B31, B90 and WV4." % (SITE["radius_miles"], ", ".join(a["name"] for a in AREAS_O[3:]))),
+        ("Which areas do you cover?", "Bromsgrove and the surrounding areas up to %d miles around: %s. Recent verified reviews come from B17, B30, B31, B90 and WV4." % (SITE["radius_miles"], ", ".join(a["name"] for a in AREAS_O[1:]))),
         ("Should I repair my roof or replace it?", SVC["roof-repairs"]["repair_or_replace"]),
         ("Is it a leak or condensation?", SVC["roof-leaks"]["leak_vs_condensation"]),
         ("Do you take on small jobs?", "Yes, from odd jobs as small as garden and gutter clearances to full refurbishments and replacements."),
@@ -547,13 +588,14 @@ def build_home():
     ]
     hero = """<section class="hero">%s<div class="wrap">
   <p class="label"><span>Roof leak or storm damage?</span><span>Family run</span><span>Free, no-obligation quotes</span></p>
-  <h1><span class="hl">Emergency roof repairs</span> in Bromsgrove, Rubery &amp; Rednal.</h1>
+  <h1><span class="hl">Emergency roof repairs</span> in Bromsgrove &amp; the surrounding areas.</h1>
   <div class="hero-foot">
-    <div class="flow"><p class="lede">Send us the details and a photo, and we&rsquo;ll come back to you. A family-run team with 45 years&rsquo; combined experience, working up to 20 miles around Bromsgrove: leaks, storm damage, chimneys, flat roofs and full re-roofs.</p>
+    <div class="flow"><p class="lede">Send us the details and a photo, and we&rsquo;ll come back to you. A family-run team with 45 years&rsquo; combined experience, working across Bromsgrove and the surrounding areas up to 20 miles out: leaks, storm damage, chimneys, flat roofs and full re-roofs.</p>
+      <p class="near-line">%s</p>
       <div class="cta-row">%s%s%s</div></div>
   </div>
 </div></section>""" % (hero_bg(SITE["home_hero"]),
-                       quote_btn(), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"))
+                       near_line(), quote_btn(), call_link(), ext(SITE["gbp"], "Google reviews &rarr;", "textlink"))
     rows = [(svc_title(s), s["summary"], "/services/%s/" % s["slug"]) for s in SERVICES]
     services = band("01 &middot; Services", "Roofing first. Then everything else.",
                     index_list(rows, thumbs=[thumb(svc_hero(s)) for s in SERVICES]) + "<h3>Brickwork, stonework &amp; building</h3>"
@@ -573,10 +615,9 @@ def build_home():
     arts = "".join(review_html(r, i == 0) for i, r in enumerate(REVIEWS))
     reviews = band("04 &middot; Reviews", "Reviews, word for word.", score_html() + '<div class="reviews">%s</div>' % arts, "reviews")
     areas = band("05 &middot; Areas", "Where we work.",
-                 "<p>Bromsgrove, Rubery, Rednal and up to %d miles around. Each area page covers its housing, what tends to go wrong with its roofs, which council handles planning, and the questions local owners ask.</p>" % SITE["radius_miles"]
-                 + areas_list([(a["name"], pcs(a), "/areas/%s/" % a["slug"]) for a in AREAS_O]), "areas", "band--alt")
-    page("/", "Emergency Roofers in Bromsgrove, Rubery & Rednal | RJR",
-         "Emergency roof repairs in Bromsgrove, Rubery and Rednal: leaks, storm damage, chimneys, flat roofs. Family run, 45 years' combined experience. Free quotes.",
+                 areas_block(), "areas", "band--alt")
+    page("/", "Emergency Roofers in Bromsgrove & Surrounding Areas | RJR",
+         "Emergency roof repairs in Bromsgrove and the surrounding areas, including Rubery and Rednal: leaks, storm damage, chimneys, flat roofs. Family run. Free quotes.",
          hero + ticker() + emergency_block() + services + work + about + reviews + areas + faq_html(faqs, "Short answers.", "06 &middot; FAQ", ""),
          key="home", schema=[faq_node(BASE + "/", faqs)], og="fascia_a", preload=SITE["home_hero"])
 
@@ -625,15 +666,18 @@ def service_body(s, area=None):
 
 
 def hub_title(kw):
-    t = "%s in %s | RJR" % (kw, TITLE_REGION)
-    return t if len(t) <= 66 else "%s in Bromsgrove & Rubery | RJR" % kw if len("%s in Bromsgrove & Rubery | RJR" % kw) <= 66 else "%s in Bromsgrove | RJR" % kw
+    for region in (TITLE_REGION, "Bromsgrove & Nearby", "Bromsgrove"):
+        t = "%s in %s | RJR" % (kw, region)
+        if len(t) <= 66:
+            return t
+    return t
 
 
 def build_service(s):
     path = "/services/%s/" % s["slug"]
     crumbs = [("Home", "/"), ("Services", "/services/"), (s["name"], path)]
     msg = "Hi RJR, I need help with %s. Postcode: " % s["name"].lower()
-    facts = [("Service", e(s["name"])), ("Area", "%s + %d miles" % (e(REGION), SITE["radius_miles"]))] + base_facts()
+    facts = [("Service", e(s["name"])), ("Area", "Bromsgrove + %d miles around" % SITE["radius_miles"])] + base_facts()
     head = page_hero(svc_hero(s), [s["trade"], e(REGION)] + (["Urgent"] if s.get("emergency") else []),
                      "%s in %s" % (e(s["h1"]), e(REGION)), [e(fill(s["answer"]))], facts, msg)
     parts, items = service_body(s)
@@ -662,7 +706,7 @@ def build_group(g):
     path = "/services/%s/" % g["slug"]
     crumbs = [("Home", "/"), ("Services", "/services/"), (g["name"], path)]
     msg = "Hi RJR, I'd like a quote for %s. Postcode: " % g["name"].lower()
-    facts = [("Trade", g["trade"]), ("Area", "%s + %d miles" % (e(REGION), SITE["radius_miles"]))] + base_facts()
+    facts = [("Trade", g["trade"]), ("Area", "Bromsgrove + %d miles around" % SITE["radius_miles"])] + base_facts()
     head = page_hero(g["hero"], [g["trade"], e(REGION)], "%s in %s" % (e(g["h1"]), e(REGION)), [e(fill(g["answer"]))], facts, msg)
     body, items = "", []
     for i, (h, paras, bullets) in enumerate(g["sections"]):
@@ -693,7 +737,7 @@ def build_services_index():
     items = {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": "%s/services/%s/" % (BASE, s["slug"]), "name": s["name"]}
                                                       for i, s in enumerate(SERVICES + GROUPS)]}
     page("/services/", "Roofing, Brickwork & Building Services in Bromsgrove | RJR",
-         "Emergency roof repairs, storm damage, leaks, re-roofing, chimneys, flat roofs, guttering and fascias, leadwork, brickwork and building across Bromsgrove, Rubery and Rednal.",
+         "Emergency roof repairs, storm damage, leaks, re-roofing, chimneys, flat roofs, guttering and fascias, leadwork, brickwork and building across Bromsgrove and the surrounding areas.",
          head + body, key="services", crumbs=[("Home", "/"), ("Services", "/services/")], schema=[items], og="tile_a", preload="tile_a")
 
 
@@ -704,14 +748,22 @@ def area_notes(a, s):
 
 def build_area(a, i):
     path = "/areas/%s/" % a["slug"]
-    crumbs = [("Home", "/"), ("Areas", "/areas/"), (a["name"], path)]
+    is_hub = a["slug"] == HUB_AREA
+    crumbs = [("Home", "/"), (AREAS_LABEL, "/areas/"), (a["name"], path)]
     msg = "Hi RJR, I'm in %s (%s) and need help with my roof." % (a["name"], a["pcs"][0])
-    facts = [("Area", a["name"]), ("Postcodes", pcs(a)), ("Council", a["council"])] + base_facts()
-    head = page_hero(a["hero"], [pcs(a), a["name"], "Emergency roofers"], "Roofers in %s" % e(a["name"]),
-                     ["RJR Home Improvements is a family-run roofing and building business working in %s (%s), with 45 years&rsquo; combined experience. Leaks and storm damage first; roofs, chimneys, flat roofs, gutters and fascias too." % (e(a["name"]), pcs(a)),
+    dist = from_hub(a)
+    facts = ([("Area", a["name"]), ("Postcodes", pcs(a))] + ([] if is_hub else [("From Bromsgrove", dist.replace("about", "About"))])
+             + [("Council", a["council"])] + base_facts())
+    h1 = "Roofers in %s" % e(a["name"]) if is_hub else "Roofers in %s, near Bromsgrove" % e(a["name"])
+    where = "Bromsgrove and the surrounding areas" if is_hub else "%s, %s" % (e(a["name"]), dist)
+    head = page_hero(a["hero"], [pcs(a), a["name"], "Main area" if is_hub else "Near Bromsgrove"], h1,
+                     ["RJR Home Improvements is a family-run roofing and building business working in %s (%s), with 45 years&rsquo; combined experience. Leaks and storm damage first; roofs, chimneys, flat roofs, gutters and fascias too." % (where, pcs(a)),
                       e(a["stock"])], facts, msg)
     feats = '<dl class="features">%s</dl>' % "".join("<div><dt>%s</dt><dd>%s</dd></div>" % (e(FEATURES[f][0]), e(FEATURES[f][1])) for f in a["features"])
     body = band("Local", "The houses in %s." % e(a["name"]), '<div class="flow"><p class="lede">%s</p><p>%s</p></div>' % (e(a["stock"]), e(a["planning"])), "local")
+    if is_hub:
+        body += band("Coverage", "Across Bromsgrove.", '<p>Neighbourhoods and villages in and around the town that we cover:</p><ul class="pills">%s</ul>'
+                     % "".join("<li>%s</li>" % e(x) for x in a["covers"]), "coverage", "band--tint")
     body += band("Roofs", "What we see on %s roofs." % e(a["name"]), feats, "roofs", "band--alt")
     rows = [(svc_title(s), s["summary"], "%s%s/" % (path, s["slug"])) for s in MATRIX]
     body += band("Services", "Roofing in %s." % e(a["name"]),
@@ -724,23 +776,35 @@ def build_area(a, i):
                          "Yes. We work across %s (%s) and nearby areas including %s. For leaks or storm damage, WhatsApp a photo and your postcode to %s."
                          % (a["name"], pcs(a), ", ".join(AREA[n]["name"] for n in a["near"]), SITE["phone"]))]
     body += faq_html(faqs, "%s questions." % e(a["name"]))
-    body += band("Nearby", "Nearby areas.", areas_list([(AREA[n]["name"], pcs(AREA[n]), "/areas/%s/" % n) for n in a["near"]]), "nearby")
-    items = [("local", "Housing"), ("roofs", "Roof types"), ("services", "Services"), ("urgent", "Is it urgent?"), ("proof", "Photos"), ("faq", "FAQ"), ("nearby", "Nearby")]
+    if is_hub:
+        body += band("Surrounding areas", "Around Bromsgrove.", areas_list([(x["name"], area_tag(x), "/areas/%s/" % x["slug"]) for x in AREAS_O[1:]]), "nearby")
+    else:
+        near = [n for n in a["near"] if n != HUB_AREA]
+        body += band("Nearby", "Nearby areas.", areas_list([(AREA[HUB_AREA]["name"], area_tag(AREA[HUB_AREA]), "/areas/%s/" % HUB_AREA)]
+                                                          + [(AREA[n]["name"], area_tag(AREA[n]), "/areas/%s/" % n) for n in near]), "nearby")
+    items = ([("local", "Housing")] + ([("coverage", "Coverage")] if is_hub else [])
+             + [("roofs", "Roof types"), ("services", "Services"), ("urgent", "Is it urgent?"), ("proof", "Photos"), ("faq", "FAQ"),
+                ("nearby", "Around Bromsgrove" if is_hub else "Nearby")])
     schema = [faq_node(BASE + path, faqs), {"@type": "Place", "@id": BASE + path + "#place", "name": a["name"],
               "address": {"@type": "PostalAddress", "addressLocality": a["name"], "postalCode": a["pcs"][0], "addressRegion": "West Midlands", "addressCountry": "GB"}}]
-    page(path, "Roofers in %s (%s) | Emergency Roof Repairs | RJR" % (a["name"], pcs(a)),
-         "Family-run roofers in %s, %s: emergency roof repairs, leaks, storm damage, chimneys and flat roofs, with local advice for %s homes. WhatsApp %s." % (a["name"], pcs(a), a["name"], SITE["phone"]),
+    title = ("Roofers in %s (%s) | Emergency Roof Repairs | RJR" % (a["name"], pcs(a)) if is_hub
+             else "Roofers in %s (%s), near Bromsgrove | RJR" % (a["name"], pcs(a)))
+    desc = ("Family-run roofers in %s, %s: emergency roof repairs, leaks, storm damage, chimneys and flat roofs, with local advice for %s homes%s. WhatsApp %s."
+            % (a["name"], pcs(a), a["name"], "" if is_hub else ", " + dist, SITE["phone"]))
+    page(path, title, desc,
          head + toc(items) + body, key="areas", crumbs=crumbs, schema=schema, og=a["hero"], msg=msg,
          cta="Roof problem in %s? Tell us here." % a["name"], preload=a["hero"], form={"area": a["slug"]})
 
 
 def build_area_service(a, s, i):
     path = "/areas/%s/%s/" % (a["slug"], s["slug"])
-    crumbs = [("Home", "/"), ("Areas", "/areas/"), (a["name"], "/areas/%s/" % a["slug"]), (s["name"], path)]
+    crumbs = [("Home", "/"), (AREAS_LABEL, "/areas/"), (a["name"], "/areas/%s/" % a["slug"]), (s["name"], path)]
     msg = "Hi RJR, I'm in %s (%s) and need help with %s." % (a["name"], a["pcs"][0], s["name"].lower())
     notes = area_notes(a, s)
-    facts = [("Service", e(s["name"])), ("Area", a["name"]), ("Postcodes", pcs(a)), ("Council", a["council"])] + base_facts()
-    head = page_hero(svc_hero(s), [pcs(a), a["name"], e(s["name"])] + (["Urgent"] if s.get("emergency") else []),
+    dist = from_hub(a)
+    facts = ([("Service", e(s["name"])), ("Area", a["name"]), ("Postcodes", pcs(a))]
+             + ([("From Bromsgrove", dist.replace("about", "About"))] if dist else []) + [("Council", a["council"])] + base_facts())
+    head = page_hero(svc_hero(s), [pcs(a), a["name"] if not dist else "%s, near Bromsgrove" % a["name"], e(s["name"])] + (["Urgent"] if s.get("emergency") else []),
                      "%s in %s" % (e(s["h1"]), e(a["name"])), [e(fill(s["answer"], a["name"], a["council"])), e(a["stock"])], facts, msg)
     local = qa_list(notes)
     feats = ", ".join(FEATURES[f][0].lower() for f in a["features"])
@@ -768,7 +832,8 @@ def build_area_service(a, s, i):
     faqs = rot + [a["faqs"][i % len(a["faqs"])]]
     body += faq_html(faqs, "More %s questions." % e(a["name"]))
     items.append(("faq", "FAQ"))
-    same = [(AREA[n]["name"], pcs(AREA[n]), "/areas/%s/%s/" % (n, s["slug"])) for n in a["near"]]
+    same_slugs = ([HUB_AREA] if a["slug"] != HUB_AREA else []) + [n for n in a["near"] if n != HUB_AREA]
+    same = [(AREA[n]["name"], area_tag(AREA[n]), "/areas/%s/%s/" % (n, s["slug"])) for n in same_slugs]
     others = [(svc_title(x), x["summary"], "/areas/%s/%s/" % (a["slug"], x["slug"])) for x in MATRIX if x["slug"] != s["slug"]]
     body += band("Nearby", "%s nearby." % e(s["name"]), areas_list(same) + "<h3>More in %s</h3>" % e(a["name"]) + index_list(others, sm=True), "nearby", "band--alt")
     items.append(("nearby", "Nearby"))
@@ -783,16 +848,18 @@ def build_area_service(a, s, i):
 
 
 def build_areas_index():
-    head = page_hero("van", ["Areas", e(REGION)], "Bromsgrove, Rubery, Rednal and around.",
-                     ["We work across Bromsgrove, Rubery, Rednal and up to %d miles around, from Hagley and Halesowen to Redditch, Droitwich Spa and Kings Norton. Each area page covers the local housing, the council that handles planning, and what tends to go wrong with roofs there." % SITE["radius_miles"]],
-                     [("Centred on", "Bromsgrove, Worcestershire"), ("Radius", "%d miles" % SITE["radius_miles"]), ("Councils", "Bromsgrove &middot; Birmingham &middot; Redditch &middot; Wychavon &middot; Dudley")] + base_facts(), "Hi RJR, I need help with my roof. Postcode: ")
-    body = band("Areas", "Pick your area.", areas_list([(a["name"], pcs(a), "/areas/%s/" % a["slug"]) for a in AREAS_O]), "areas")
+    head = page_hero("van", ["Areas", "Main area: Bromsgrove"], "Bromsgrove and the surrounding areas.",
+                     ["We work across Bromsgrove and the surrounding areas, up to %d miles out: Rubery and Rednal, then Barnt Green, Catshill, Alvechurch and out as far as Halesowen, Redditch, Droitwich Spa and Kings Norton. Each area page covers the local housing, the council that handles planning, and what tends to go wrong with roofs there." % SITE["radius_miles"]],
+                     [("Main area", "Bromsgrove (B60, B61)"), ("Radius", "%d miles" % SITE["radius_miles"]),
+                      ("Councils", "Bromsgrove &middot; Birmingham &middot; Redditch &middot; Wychavon &middot; Dudley")] + base_facts(),
+                     "Hi RJR, I need help with my roof. Postcode: ")
+    body = band("Areas", "Pick your area.", areas_block(), "areas")
     matrix = "".join('<div class="flow-h"><h3><a href="/areas/%s/">%s</a> &middot; %s</h3>%s</div>' % (
         a["slug"], e(a["name"]), pcs(a), index_list([(svc_title(s), "", "/areas/%s/%s/" % (a["slug"], s["slug"])) for s in MATRIX], sm=True)) for a in AREAS_O)
     body += band("Directory", "Every service, every area.", '<div class="cols-2">%s</div>' % matrix, "directory", "band--alt")
-    page("/areas/", "Areas Covered: Bromsgrove, Rubery, Rednal & 20 Miles | RJR",
-         "Roofers covering %s." % ", ".join(a["name"] for a in AREAS_O),
-         head + body, key="areas", crumbs=[("Home", "/"), ("Areas", "/areas/")], og="van", preload="van")
+    page("/areas/", "Roofers in Bromsgrove & Surrounding Areas | RJR",
+         "Roofers covering Bromsgrove and the surrounding areas: %s." % ", ".join(a["name"] for a in AREAS_O[1:]),
+         head + body, key="areas", crumbs=[("Home", "/"), (AREAS_LABEL, "/areas/")], og="van", preload="van")
 
 
 def build_work():
@@ -833,7 +900,7 @@ def build_about():
     body += band("Trades", "Trades &amp; services.", '<div class="cols-2">%s</div>' % trades, "trades")
     body += band("On site", "Our van, your drive.", '<figure class="onsite">%s<figcaption>%s</figcaption></figure>' % (img("van", "(min-width: 64rem) 60vw, 100vw"), e(IMG["van"][1])) + pull("diagnosis") + pull("roofing"), "words", "band--ink", "var(--red)")
     page("/about/", "About RJR Home Improvements | Family-Run Bromsgrove Roofers",
-         "RJR Home Improvements is a family-run business with 45 years' combined experience, covering emergency roofing, bricklaying and building across Bromsgrove, Rubery and Rednal.",
+         "RJR Home Improvements is a family-run business with 45 years' combined experience, covering emergency roofing, bricklaying and building across Bromsgrove and the surrounding areas.",
          head + body, key="about", crumbs=[("Home", "/"), ("About", "/about/")], og="chim_b2", preload="chim_b2")
 
 
@@ -893,7 +960,7 @@ def build_legal():
                "Which cookies and similar technologies this website uses, and how to change your choice.", [
         ("The short version", ["This website sets no cookies of its own by default. Optional analytics run only if you choose <b>Accept analytics</b>."]),
         ("Strictly necessary storage", ["When you make a choice on the cookie banner, we store it in your browser's local storage under the name <b>rjr-consent</b>, so we don't ask again on every page. It holds only your choice and the date, and is kept for 180 days. It is not shared with anyone."]),
-        ("Analytics (optional, off by default)", ["If analytics are switched on for this site and you accept them, an analytics service may set cookies to count visits and see which pages are used. We only use this in aggregate to improve the site. If you reject, no analytics scripts load."]),
+        ("Analytics (optional, off by default)", ["If you choose <b>Accept analytics</b>, we load Google Analytics (measurement ID G-GCVKJDYLE4). Google may set cookies named <b>_ga</b> and <b>_ga_GCVKJDYLE4</b> to count visits and see which pages are used. We only use this in aggregate to improve the site. If you reject, the Google tag does not run and those cookies are not set. Google's own policy is at %s." % ext("https://policies.google.com/privacy", "policies.google.com/privacy")]),
         ("Third-party services", ["Fonts are loaded from Google Fonts; this doesn't set cookies but does connect your browser to Google. Links to WhatsApp, Google Maps and Rated People take you to those sites, which set their own cookies under their own policies."]),
         ("Changing your choice", ['Use the <button type="button" data-consent-open style="text-decoration:underline">cookie settings</button> button, also in the footer of every page, to change your choice at any time. You can also clear site data in your browser settings.']),
     ], "Cookie policy for RJR Home Improvements: no tracking cookies by default, optional analytics only with consent.")
@@ -957,7 +1024,7 @@ def write_meta():
     revs = "\n".join("- %s, %s, %s (verified): %s" % (r["name"], r["pc"], r["disp"], '"%s"' % r["text"] if r["text"] else "rating without written comment") for r in REVIEWS)
     (OUT / "llms.txt").write_text("""# %(name)s
 
-> Family-run roofing, bricklaying and building business (%(legal)s) serving Bromsgrove, Rubery, Rednal and up to 20 miles around, focused on emergency roof repairs, storm damage and roof leaks. %(yrs)d years' combined experience. Rated "%(label)s" from %(count)d ratings on Rated People.
+> Family-run roofing, bricklaying and building business (%(legal)s) serving Bromsgrove and the surrounding areas (Rubery, Rednal and up to 20 miles around), focused on emergency roof repairs, storm damage and roof leaks. %(yrs)d years' combined experience. Rated "%(label)s" from %(count)d ratings on Rated People.
 
 ## Key facts
 - Legal name: %(legal)s
@@ -968,7 +1035,7 @@ def write_meta():
 - Experience: %(yrs)d years combined in the trade
 - Rating: %(label)s, %(count)d ratings on Rated People (%(rp)s)
 - Google Business Profile: %(gbp)s
-- Service area: Bromsgrove, Rubery, Rednal and up to 20 miles around, including Barnt Green, Lickey, Catshill, Alvechurch, Longbridge, Northfield, Kings Norton, Hagley, Halesowen, Redditch, Droitwich Spa, Wythall and Hollywood
+- Service area: Bromsgrove (main area) and the surrounding areas up to 20 miles around: Rubery, Rednal, Barnt Green, Lickey, Catshill, Alvechurch, Longbridge, Northfield, Kings Norton, Hagley, Halesowen, Redditch, Droitwich Spa, Wythall and Hollywood
 - Contact: WhatsApp https://wa.me/%(wa)s · phone %(phone)s
 
 ## About
