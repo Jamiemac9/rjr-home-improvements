@@ -158,3 +158,9 @@ Not yet measured: Lighthouse / PageSpeed scores on the live host, Google ranking
 - Buy rjrhomeimprovements.com and point it at the host.
 - Client to confirm the registered office (246 Court Oak Road, Birmingham B32 2EG, from Companies House) now shown in the privacy policy.
 - The business to read and approve the privacy policy.
+
+## Round: launch indexing fix (9 Nov 2026)
+
+- **Found:** an independent crawl on 6 and 9 Nov showed every page on the live domain carrying `noindex,nofollow`, and `robots.txt` blocking all crawlers. Cause: `DEMO = "1"` was still set in `netlify.toml` after launch.
+- **Changed:** removed `DEMO` from `netlify.toml`, so Netlify builds in LIVE mode.
+- **Checked:** `python3 build.py` reports LIVE mode, 111 pages; `tools/check_site.py` prints OK; homepage robots meta is `index,follow`; `robots.txt` is `Allow: /` with the sitemap.

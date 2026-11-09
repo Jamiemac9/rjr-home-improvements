@@ -4,9 +4,8 @@
 
 [build.environment]
   PYTHON_VERSION = "3.11"
-  # DEMO hides the site from Google while it's on the free netlify.app address.
-  # AT LAUNCH: delete this line, then redeploy.
-  DEMO = "1"
+  # DEMO=1 was removed on 9 Nov 2026: the site is live on rjrhomeimprovements.com
+  # and must be indexable. Only set DEMO for a throwaway preview build.
 
 # Send www to the main domain (only takes effect once the domain is connected)
 [[redirects]]
