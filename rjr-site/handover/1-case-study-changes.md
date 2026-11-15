@@ -164,3 +164,10 @@ Not yet measured: Lighthouse / PageSpeed scores on the live host, Google ranking
 - **Found:** an independent crawl on 6 and 9 Nov showed every page on the live domain carrying `noindex,nofollow`, and `robots.txt` blocking all crawlers. Cause: `DEMO = "1"` was still set in `netlify.toml` after launch.
 - **Changed:** removed `DEMO` from `netlify.toml`, so Netlify builds in LIVE mode.
 - **Checked:** `python3 build.py` reports LIVE mode, 111 pages; `tools/check_site.py` prints OK; homepage robots meta is `index,follow`; `robots.txt` is `Allow: /` with the sitemap.
+
+## Round: roofing advice section and first guide (14 Nov 2026)
+
+- **Why:** the site had no advice pages, so it could only rank for service and area searches. A short, sourced guide answers the question people search right after a storm, and links them straight to the storm damage and emergency pages.
+- **Changed:** new `/advice/` hub and first guide, `/advice/storm-damage-roof-first-24-hours/`, built from `GUIDES` in `content.py` with `build_advice_index()` and `build_guide()` in `build.py`. Same hero, bands, steps, form and footer as every other page. Article schema with published and modified dates. Its own share image (`images/guide-storm-damage-first-24-hours.png`), a designed card in the site's red, charcoal and white with Archivo and IBM Plex Mono, not a job photo. Linked from the home page services band, an "Advice" band on the storm damage and emergency service pages, the footer (Company), the HTML sitemap and `llms.txt`. The sitemap now carries the guide's own `lastmod`.
+- **Facts:** every outside fact links to its source (Met Office, Association of British Insurers, 105), each read on 14 Nov 2026. Everything else repeats advice already on the site. No prices, response times or insurance promises.
+- **Checked:** `python3 build.py` LIVE mode, 113 pages; `tools/check_site.py` prints OK; no horizontal scroll at 375px.

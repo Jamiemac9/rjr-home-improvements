@@ -112,6 +112,8 @@ IMG = {
     "flat_a2": ("flat-roof-side-after.jpg", "The same finished felt flat roof from the other end, with flashing along the house wall and the garden below", "55% 55%"),
     "van": ("van-on-site.jpg", "RJR Home Improvements van and ladders on a customer's drive", "62% 50%"),
     "leanto_d": ("lean-to-porch-framing.jpg", "Two builders fixing the timber frame for a new lean-to porch roof across the front of two terraced houses", "50% 58%"),
+    # Advice guide cards: designed graphics in the site's own type and colours, not job photos.
+    "guide_storm": ("guide-storm-damage-first-24-hours.png", "Roofing advice card: Storm damage to your roof, the first 24 hours. Danger to life, call 999. Power line down, call 105", "30% 50%"),
 }
 
 # One job per sequence, verified from the photos (same building, same details).
@@ -757,6 +759,84 @@ AREAS = [
             ("Have you worked near Wythall?", "A recent verified Rated People review is from B90, just across the boundary in Shirley: “Ryan and his team did great work.”"),
             ("Which council covers Wythall and Hollywood?", "Mostly Bromsgrove District Council, though some roads near the city edge fall under Birmingham City Council. Your council tax bill shows which."),
             ("Our porch roof leaks. Is it the main roof?", "Usually not. Porch and bay canopies have their own flashing where they meet the wall, which often fails before the main roof does."),
+        ],
+    },
+]
+
+
+# --------------------------------------------------------------------------
+# Advice guides (/advice/). Every outside fact carries its source link and the date it was checked.
+# Sections are HTML. Keep to facts already on this site or read at the cited source.
+# --------------------------------------------------------------------------
+MET_SAFE = "https://weather.metoffice.gov.uk/warnings-and-advice/seasonal-advice/your-home/stay-safe-in-a-storm"
+MET_STORMS = "https://weather.metoffice.gov.uk/warnings-and-advice/uk-storm-centre"
+ABI_STORMS = "https://www.abi.org.uk/policy-and-guidance/general-insurance/storms"
+POWER_105 = "https://www.powercut105.com/"
+
+GUIDES = [
+    {
+        "slug": "storm-damage-roof-first-24-hours",
+        "published": "2026-11-14", "modified": "2026-11-14", "human": "14 November 2026",
+        "image": "guide_storm",
+        "title": "Storm Damage to Your Roof: The First 24 Hours | RJR",
+        "h1": "Storm damage to your roof: what to do in the first 24 hours",
+        "crumb": "Storm damage: the first 24 hours",
+        "headline": "Storm damage to your roof: what to do in the first 24 hours",
+        "desc": "Storm damaged your roof? What to do in the first 24 hours: stay safe, stop the water, photograph it, tell your insurer and get the roof made safe.",
+        "summary": "Stay safe, stop the water, photograph it, tell your insurer, then get the roof made safe.",
+        "related": ["storm-damage", "emergency-roof-repairs"],
+        "answer": [
+            "After a storm damages your roof, keep everyone safe first, then stop water spreading inside, photograph the damage, tell your insurer and get the roof made safe by a roofer. Don&rsquo;t climb up yourself, and don&rsquo;t go out to fix anything while the storm is still blowing.",
+            "This guide takes the first 24 hours in order, using advice from the Met Office, the Association of British Insurers (ABI) and the electricity networks&rsquo; 105 line. It&rsquo;s general guidance: your own insurance policy decides what you&rsquo;re covered for.",
+        ],
+        "sections": [
+            ("safe", "First hour", "Is anyone in danger?",
+             '<p class="lede">If a chimney, wall or ceiling looks like it could come down, or someone is hurt, call 999. Otherwise, stay indoors while the storm is still blowing and keep away from anything that could fall.</p>'
+             '<ul class="ruled">'
+             '<li>Don&rsquo;t go outside to repair damage while the storm is in progress. That&rsquo;s the Met Office&rsquo;s advice, and it applies to ladders and roofs above all.</li>'
+             '<li>After the storm, don&rsquo;t walk too close to walls, buildings and trees, because they could have been weakened.</li>'
+             '<li>Don&rsquo;t touch electricity or telephone cables that have blown down or are still hanging.</li>'
+             '<li>Stay out of rooms with a bulging or cracked ceiling, and keep people and cars away from below a leaning chimney.</li>'
+             '</ul>'
+             '<p>The Met Office advice is on its <a class="textlink" href="%s" rel="noopener">stay safe in a storm</a> page (checked 14 November 2026).</p>' % MET_SAFE),
+            ("power", "Power lines", "Who do I call about a damaged power line?",
+             '<p class="lede">Call 105. It&rsquo;s the number for reporting power cuts and damage to electricity power lines and substations, and it puts you through to the network operator for your area. If there&rsquo;s an immediate serious risk, contact the emergency services as well.</p>'
+             '<p>Source: <a class="textlink" href="%s" rel="noopener">powercut105.com</a> (checked 14 November 2026).</p>' % POWER_105),
+            ("water", "Next few hours", "How do I stop water getting further into the house?",
+             '<p class="lede">Contain the water you can reach from inside, and make the area around it safe. You don&rsquo;t need to find the hole in the roof to do this.</p>'
+             '<ol class="steps">'
+             '<li><div><b>Catch the drip.</b><p>A bucket or bowl under the drip, with a towel in it to stop splashing. Move furniture, rugs and anything valuable out of the way.</p></div></li>'
+             '<li><div><b>Make the electrics safe.</b><p>If water is near light fittings or sockets, switch that circuit off at the consumer unit and leave it off.</p></div></li>'
+             '<li><div><b>Check the loft, if it&rsquo;s safe.</b><p>Only if you can get in without standing on the ceiling between joists. Daylight through the roof, wet insulation or drips show where the water is coming in.</p></div></li>'
+             '</ol>'),
+            ("photos", "Evidence", "What should I photograph for an insurance claim?",
+             '<p class="lede">Photograph or film everything before anything is moved or repaired: the roof from the ground, the ceilings and walls inside, and anything that has fallen. Keep fallen tiles, slates or chimney pots.</p>'
+             '<ul class="ruled">'
+             '<li>The ABI says to take photos or video, keep an itemised invoice for any emergency repair, and keep every receipt, because they form part of your claim.</li>'
+             '<li>It also says not to rush to throw away damaged items, unless they are a danger to health.</li>'
+             '<li>Take every photo from the ground or from inside. Never go up a ladder to get a better picture.</li>'
+             '</ul>'
+             '<p>Source: <a class="textlink" href="%s" rel="noopener">ABI guidance on storms</a> (checked 14 November 2026).</p>' % ABI_STORMS),
+            ("insurer", "Same day", "When should I tell my insurer?",
+             '<p class="lede">As soon as you can. The ABI&rsquo;s advice is to contact your property insurer as soon as possible, and to do emergency or temporary repairs only if it&rsquo;s safe to do so and you have spoken to your insurer.</p>'
+             '<p>While you wait for the insurer&rsquo;s assessment, the ABI suggests getting estimates from local trades. We can&rsquo;t tell you what your policy covers: the policy wording and your insurer decide that, so ask them before you agree to any work beyond making the roof safe.</p>'),
+            ("make-safe", "Making it safe", "What does a roofer do to make a storm-damaged roof safe?",
+             '<p class="lede">Making safe means securing or taking down anything loose that could fall, and making the gaps watertight. A full repair can follow once you and your insurer are ready.</p>'
+             '<p>When we&rsquo;re called out after a storm, we start from your photos, make the roof safe and dry, then check the rest of it, because storms rarely damage just one spot. We photograph the roof before and after, which helps with an insurance claim. The full process is on our <a class="textlink" href="/services/storm-damage/">storm damage repairs</a> page, and if water is coming in right now, see <a class="textlink" href="/services/emergency-roof-repairs/">emergency roof repairs</a>.</p>'),
+            ("later", "After day one", "What can wait until after the first day?",
+             '<p class="lede">Finding hidden damage. A tile can slip without leaking until the next heavy rain, and water can soak into insulation for days before a stain appears on the ceiling.</p>'
+             '<ul class="ruled">'
+             '<li>Look again after the next downpour: the ridge line, the chimney and its pots, the roof edges and the gutters, all from the ground.</li>'
+             '<li>Give it time to dry. The ABI notes it can take weeks, sometimes months, for a property to dry out fully after water gets in.</li>'
+             '<li>Check on neighbours or relatives who may struggle, and help them arrange repairs. The Met Office suggests this too.</li>'
+             '</ul>'
+             '<p>The 2026/27 storm season is already under way. The Met Office named Storm Austen on 20 October and Storm Boelo on 22 October 2026 (<a class="textlink" href="%s" rel="noopener">Met Office UK Storm Centre</a>, checked 14 November 2026). If either left a tile loose, the next storm will find it. For stains that keep coming back, our <a class="textlink" href="/services/roof-leaks/">roof leak repairs</a> page explains how to tell a leak from condensation.</p>' % MET_STORMS),
+        ],
+        "sources": [
+            ("Met Office: Stay safe in a storm", MET_SAFE),
+            ("Met Office: UK Storm Centre, storm names 2026/27", MET_STORMS),
+            ("Association of British Insurers: Storms", ABI_STORMS),
+            ("105: report a power cut or damaged power lines", POWER_105),
         ],
     },
 ]

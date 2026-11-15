@@ -17,7 +17,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from content import (SITE, ABOUT, TRADES, REVIEWS, QUOTES, IMG, PROJECTS, FEATURES, FEATURE_NOTES,
-                     SERVICES, GROUPS, AREAS)
+                     SERVICES, GROUPS, AREAS, GUIDES)
 from tools.optimise_images import optimise
 
 ROOT = Path(__file__).parent
@@ -48,6 +48,7 @@ ORDER = [HUB_AREA] + FOCUS_AREAS + sorted((a for a in AREA if a not in [HUB_AREA
 AREAS_O = [AREA[s] for s in ORDER]
 REV = {r["id"]: r for r in REVIEWS}
 PAGES = []
+LASTMOD = {}   # path -> lastmod for pages that change on their own date (advice guides)
 MANIFEST = {}
 VERSION = ""
 TEL = "tel:" + SITE["phone_intl"]
@@ -289,7 +290,7 @@ def footer():
   <div class="foot-cols">
     <div><h2>Roofing</h2><ul>%s</ul></div>
     <div><h2>More trades</h2><ul>%s</ul><h2 style="padding-top:var(--s-1)">Company</h2><ul>
-      <li><a href="/about/">About RJR</a></li><li><a href="/our-work/">Before &amp; after</a></li><li><a href="/reviews/">Reviews</a></li></ul></div>
+      <li><a href="/about/">About RJR</a></li><li><a href="/our-work/">Before &amp; after</a></li><li><a href="/reviews/">Reviews</a></li><li><a href="/advice/">Roofing advice</a></li></ul></div>
     <div><h2>Areas</h2><ul><li><a href="/areas/">All areas</a></li>%s</ul></div>
     <div><h2>Contact</h2><ul>
       <li><a href="/contact/">Get a quote</a></li>
@@ -599,7 +600,8 @@ def build_home():
     rows = [(svc_title(s), s["summary"], "/services/%s/" % s["slug"]) for s in SERVICES]
     services = band("01 &middot; Services", "Roofing first. Then everything else.",
                     index_list(rows, thumbs=[thumb(svc_hero(s)) for s in SERVICES]) + "<h3>Brickwork, stonework &amp; building</h3>"
-                    + index_list([(e(g["name"]), g["summary"], "/services/%s/" % g["slug"]) for g in GROUPS], thumbs=[thumb(g["hero"]) for g in GROUPS]), "services")
+                    + index_list([(e(g["name"]), g["summary"], "/services/%s/" % g["slug"]) for g in GROUPS], thumbs=[thumb(g["hero"]) for g in GROUPS])
+                    + "<h3>Roofing advice</h3>" + index_list([(e(gd["headline"]), gd["summary"], "/advice/%s/" % gd["slug"]) for gd in GUIDES], sm=True), "services")
     work = band("02 &middot; Before &amp; after", "Same roof. Before, then after.",
                 project_html("extension", 1) + project_html("chimney", 2) + project_html("flatroof", 3) + project_html("fascias", 4)
                 + '<p><a class="btn" href="/our-work/">All before &amp; after photos</a></p>', "work", "band--alt")
@@ -692,6 +694,10 @@ def build_service(s):
     faqs = [(fill(q), fill(a)) for q, a in s["faqs"]]
     body += faq_html(faqs)
     items.append(("faq", "FAQ"))
+    advice = [gd for gd in GUIDES if s["slug"] in gd["related"]]
+    if advice:
+        body += band("Advice", "Read this first.", index_list([(e(gd["headline"]), gd["summary"], "/advice/%s/" % gd["slug"]) for gd in advice], sm=True), "advice", "band--alt")
+        items.append(("advice", "Advice"))
     related = [x for x in SERVICES if x["slug"] != s["slug"]][:6]
     body += band("Related", "Related work.", index_list([(svc_title(x), x["summary"], "/services/%s/" % x["slug"]) for x in related], sm=True), "related")
     schema = [service_node(BASE + path, "%s in %s" % (s["name"], TITLE_REGION), s["name"], fill(s["answer"])), faq_node(BASE + path, faqs)]
@@ -986,7 +992,8 @@ def build_sitemap_page():
     core = [("Home", "/"), ("Contact", "/contact/"), ("Services", "/services/"), ("Areas", "/areas/"), ("Before & after", "/our-work/"), ("Reviews", "/reviews/"),
             ("About", "/about/"), ("Privacy policy", "/privacy-policy/"), ("Cookie policy", "/cookie-policy/")]
     blocks = ['<div class="flow-h"><h3>Pages</h3>%s</div>' % ul(core),
-              '<div class="flow-h"><h3>Services</h3>%s</div>' % ul([(s["name"], "/services/%s/" % s["slug"]) for s in SERVICES + GROUPS])]
+              '<div class="flow-h"><h3>Services</h3>%s</div>' % ul([(s["name"], "/services/%s/" % s["slug"]) for s in SERVICES + GROUPS]),
+              '<div class="flow-h"><h3>Roofing advice</h3>%s</div>' % ul([("All roofing advice", "/advice/")] + [(gd["headline"], "/advice/%s/" % gd["slug"]) for gd in GUIDES])]
     for a in AREAS_O:
         rows = [(a["name"] + " overview", "/areas/%s/" % a["slug"])] + [(s["name"], "/areas/%s/%s/" % (a["slug"], s["slug"])) for s in MATRIX]
         blocks.append('<div class="flow-h"><h3>%s &middot; %s</h3>%s</div>' % (e(a["name"]), pcs(a), ul(rows)))
@@ -994,6 +1001,45 @@ def build_sitemap_page():
     page("/sitemap/", "Sitemap | RJR Home Improvements", "Every page on the RJR Home Improvements website.",
          head + '<section class="band"><div class="wrap"><div class="cols-2">%s</div></div></section>' % "".join(blocks),
          crumbs=[("Home", "/"), ("Sitemap", "/sitemap/")])
+
+
+def build_advice_index():
+    head = page_hero(None, ["Roofing advice", e(REGION)], "Roofing advice.",
+                     ["Plain answers to the roof questions people ask us most, written by RJR Home Improvements. Facts from outside sources are linked to the source and dated."],
+                     None, "", buttons=False)
+    rows = [(e(gd["headline"]), "%s Updated %s." % (gd["summary"], gd["human"]), "/advice/%s/" % gd["slug"]) for gd in GUIDES]
+    body = band("Guides", "Guides.", index_list(rows, thumbs=[thumb(gd["image"]) for gd in GUIDES]), "guides")
+    items = {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": "%s/advice/%s/" % (BASE, gd["slug"]), "name": gd["headline"]}
+                                                      for i, gd in enumerate(GUIDES)]}
+    page("/advice/", "Roofing Advice for Bromsgrove Homeowners | RJR",
+         "Plain-English roofing advice from RJR Home Improvements: what to do after storm damage, leaks and more, with sources linked and dated.",
+         head + body, crumbs=[("Home", "/"), ("Roofing advice", "/advice/")], schema=[items], og=GUIDES[0]["image"])
+    LASTMOD["/advice/"] = max(gd["modified"] for gd in GUIDES)
+
+
+def build_guide(gd):
+    path = "/advice/%s/" % gd["slug"]
+    crumbs = [("Home", "/"), ("Roofing advice", "/advice/"), (gd["crumb"], path)]
+    facts = [("Written by", e(SITE["name"])), ("Published", gd["human"]), ("Danger to life", "Call 999"), ("Power line down", "Call 105"),
+             ("Roof made safe", '<a href="%s" rel="noopener">WhatsApp %s</a>' % (e(wa("Hi RJR, a storm has damaged my roof. Postcode: ")), SITE["phone"]))]
+    head = page_hero(None, ["Roofing advice", "Updated %s" % gd["human"]], e(gd["h1"]), gd["answer"], facts, "Hi RJR, a storm has damaged my roof. Postcode: ")
+    card = '<figure style="max-width:52rem">%s</figure>' % img(gd["image"], "(min-width: 64rem) 52rem, 100vw", lazy=False)
+    body, items = "", []
+    for i, (hid, idx, h2, inner) in enumerate(gd["sections"]):
+        body += band(idx, e(h2), (card if i == 0 else "") + inner, hid, "band--alt" if i % 2 else "")
+        items.append((hid, h2))
+    src = '<ul class="ruled">%s</ul><p>Each source was read on %s. If anything here has changed, the source wins.</p>' % (
+        "".join('<li>%s</li>' % ext(u, e(n), "textlink") for n, u in gd["sources"]), gd["human"])
+    body += band("Sources", "Sources.", src, "sources")
+    items.append(("sources", "Sources"))
+    art = {"@type": "Article", "@id": BASE + path + "#article", "headline": gd["headline"], "description": gd["desc"],
+           "datePublished": gd["published"], "dateModified": gd["modified"], "inLanguage": "en-GB",
+           "author": {"@id": BIZ}, "publisher": {"@id": BIZ}, "mainEntityOfPage": {"@id": BASE + path + "#webpage"},
+           "image": BASE + asset(MANIFEST[gd["image"]]["stem"] + "-og.jpg"), "citation": [u for _, u in gd["sources"]]}
+    page(path, gd["title"], gd["desc"], head + toc(items) + body, crumbs=crumbs, schema=[art], og=gd["image"],
+         msg="Hi RJR, a storm has damaged my roof. Postcode: ", cta="Storm hit the roof? Show us the damage.",
+         form={"service": "storm-damage", "urgency": "emergency"})
+    LASTMOD[path] = gd["modified"]
 
 
 def build_404():
@@ -1010,10 +1056,11 @@ def write_meta():
         groups.setdefault(g, []).append(p)
     names = []
     for g, paths in groups.items():
-        urls = "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (BASE, p, SITE["lastmod"]) for p in sorted(paths))
+        urls = "".join("<url><loc>%s%s</loc><lastmod>%s</lastmod></url>\n" % (BASE, p, LASTMOD.get(p, SITE["lastmod"])) for p in sorted(paths))
         (OUT / ("sitemap-%s.xml" % g)).write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
         names.append("sitemap-%s.xml" % g)
-    idx = "".join("<sitemap><loc>%s/%s</loc><lastmod>%s</lastmod></sitemap>\n" % (BASE, n, SITE["lastmod"]) for n in names)
+    newest = max([SITE["lastmod"]] + list(LASTMOD.values()))
+    idx = "".join("<sitemap><loc>%s/%s</loc><lastmod>%s</lastmod></sitemap>\n" % (BASE, n, newest if n == "sitemap-core.xml" else SITE["lastmod"]) for n in names)
     (OUT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</sitemapindex>\n' % idx)
     if DEMO:
         (OUT / "robots.txt").write_text("# Demo build: not for search engines. Rebuild without DEMO=1 at launch.\nUser-agent: *\nDisallow: /\n")
@@ -1047,11 +1094,15 @@ def write_meta():
 ## Areas
 %(areas)s
 
+## Roofing advice
+%(advice)s
+
 ## Recent reviews (verbatim, Rated People)
 %(revs)s
 """ % {"name": SITE["name"], "legal": SITE["legal_name"], "yrs": SITE["experience_years"], "label": SITE["rating_label"], "count": SITE["rating_count"],
        "rp": SITE["rated_people"], "cn": SITE["company_number"] or "not listed", "gbp": SITE["gbp"], "wa": SITE["whatsapp"], "phone": SITE["phone"], "about": " ".join(ABOUT),
-       "svc": svc, "areas": ars, "revs": revs}, encoding="utf-8")
+       "svc": svc, "areas": ars, "revs": revs,
+       "advice": "\n".join("- [%s](%s/advice/%s/): %s" % (gd["headline"], BASE, gd["slug"], gd["summary"]) for gd in GUIDES)}, encoding="utf-8")
 
 
 def main():
@@ -1080,6 +1131,9 @@ def main():
     build_about()
     build_legal()
     build_contact()
+    build_advice_index()
+    for gd in GUIDES:
+        build_guide(gd)
     build_sitemap_page()
     build_404()
     write_meta()
